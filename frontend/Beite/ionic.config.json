@@ -1,0 +1,7 @@
+{
+  "name": "Beite",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
