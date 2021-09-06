@@ -12,6 +12,8 @@ Sjekk at man har filen "local.properties" i frontend/Beite/android/, og at den h
 
 ### Kjøre appen
 
+Først naviger til mappen frontend/beite.
+
 Kjøre appen i nettleseren på PC-en:
 
 - ionic serve
@@ -19,3 +21,15 @@ Kjøre appen i nettleseren på PC-en:
 Kjøre appen i Android-emulator i Android studio (krever at en emulator har blitt opprettet i Android studio):
 
 - ionic capacitor run android --target=Fordypningsprosjekt
+
+### Bygge appen
+
+Først naviger til mappen frontend/beite.
+
+iOS:
+
+- ionic capacitor build ios
+
+Android
+
+- ionic capacitor build android
