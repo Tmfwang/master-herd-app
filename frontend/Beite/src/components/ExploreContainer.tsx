@@ -35,7 +35,6 @@ const ExploreContainer: React.FC<ContainerProps> = () => {
   >();
 
   useEffect(() => {
-    alert("YO");
     BackgroundGeolocation.addWatcher(
       {
         backgroundMessage:
@@ -90,7 +89,7 @@ const ExploreContainer: React.FC<ContainerProps> = () => {
       /* BackgroundGeolocation.removeWatcher({
         id: watcher_id,
       }); */
-      alert(watcher_id);
+      console.log(watcher_id);
     });
   }, []);
 
