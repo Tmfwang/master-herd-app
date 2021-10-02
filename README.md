@@ -18,9 +18,9 @@ Kjøre appen i nettleseren på PC-en:
 
 - ionic serve
 
-Kjøre appen i Android-emulator i Android studio (krever at en emulator har blitt opprettet i Android studio):
+Kjøre appen på Android-mobil (bytt ut target med din mobil, eller utelatt å definere target dersom du ikke vet hva mobilen heter):
 
-- ionic capacitor run android --target=Fordypningsprosjekt
+- ionic capacitor run android --target=ce021712e272022f03
 
 ### Bygge appen
 
