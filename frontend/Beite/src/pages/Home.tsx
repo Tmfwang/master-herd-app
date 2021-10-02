@@ -5,7 +5,7 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import ExploreContainer from "../components/ExploreContainer";
+//import ExploreContainer from "../components/ExploreContainer";
 import LeafletMap from "../components/LeafletMap";
 import "./Home.css";
 
@@ -24,7 +24,7 @@ const Home: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <LeafletMap />
-        <ExploreContainer />
+        {/* <ExploreContainer /> */}
       </IonContent>
     </IonPage>
   );
