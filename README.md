@@ -8,11 +8,11 @@ Installer Ionic CLI, native-run, og cordova-res med:
 
 - npm install -g @ionic/cli native-run cordova-res
 
-Sjekk at man har filen "local.properties" i frontend/Beite/android/, og at den har filstien til Android SDK-en (sdk.dir=<filsti>).
+Sjekk at man har filen "local.properties" i frontend/Herd/android/, og at den har filstien til Android SDK-en (sdk.dir=<filsti>).
 
 ### Kjøre appen
 
-Først naviger til mappen frontend/beite.
+Først naviger til mappen frontend/Herd.
 
 Kjøre appen i nettleseren på PC-en:
 
@@ -28,7 +28,7 @@ Kjøre appen på Android-mobil med live-reload (her vil appen egentlig hostes fr
 
 ### Bygge appen
 
-Først naviger til mappen frontend/beite.
+Først naviger til mappen frontend/Herd.
 
 iOS:
 
