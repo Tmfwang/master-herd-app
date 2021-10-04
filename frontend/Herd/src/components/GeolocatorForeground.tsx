@@ -1,7 +1,9 @@
+import { App } from "@capacitor/app";
+
 import { locationType } from "../types";
 import { registerPlugin } from "@capacitor/core";
 import { BackgroundGeolocationPlugin } from "@capacitor-community/background-geolocation";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 const BackgroundGeolocation = registerPlugin<BackgroundGeolocationPlugin>(
   "BackgroundGeolocation"
 );
@@ -10,18 +12,39 @@ interface GeolocatorProps {
   latestLocationUpdateCallback: (location: locationType) => void;
 }
 
-const Geolocator: React.FC<GeolocatorProps> = ({
+// This geolocator stops listening to location updates whenever the app is backgrounded.
+// This can be used to provide information like user orientation only when the
+// app is foregrounded (to save power and space)
+const GeolocatorForeground: React.FC<GeolocatorProps> = ({
   latestLocationUpdateCallback,
 }) => {
   const [geoWatcherId, setGeoWatcherId] = useState<string>("");
+  const [appIsActive, setAppIsActive] = useState<boolean>(false);
 
-  const cleanup = () => {
-    BackgroundGeolocation.removeWatcher({
-      id: geoWatcherId,
+  // Adds a listener to whether or not the app is in the foreground (active),
+  // which removes the geolocator watcher whenever the app is backgrounded and
+  // adds another watcher whenever the app is foregrounded again.
+  useEffect(() => {
+    App.addListener("appStateChange", ({ isActive }) => {
+      setAppIsActive(isActive);
     });
-  };
+
+    setAppIsActive(true);
+
+    return cleanup;
+  }, []);
 
   useEffect(() => {
+    if (appIsActive) {
+      addForegroundWatcher();
+    } else {
+      cleanup();
+    }
+  }, [appIsActive]);
+
+  const addForegroundWatcher = () => {
+    cleanup();
+
     BackgroundGeolocation.addWatcher(
       {
         backgroundMessage:
@@ -29,7 +52,7 @@ const Geolocator: React.FC<GeolocatorProps> = ({
         backgroundTitle: "GPS er aktivert",
         requestPermissions: true,
         stale: false,
-        distanceFilter: 10,
+        distanceFilter: 0,
       },
 
       function callback(location, error) {
@@ -72,11 +95,19 @@ const Geolocator: React.FC<GeolocatorProps> = ({
     ).then(function after_the_watcher_has_been_added(watcher_id) {
       setGeoWatcherId(watcher_id);
     });
+  };
 
-    return cleanup;
-  }, []);
+  const cleanup = () => {
+    if (geoWatcherId) {
+      BackgroundGeolocation.removeWatcher({
+        id: geoWatcherId,
+      });
+
+      setGeoWatcherId("");
+    }
+  };
 
   return <div />;
 };
 
-export default Geolocator;
+export default GeolocatorForeground;

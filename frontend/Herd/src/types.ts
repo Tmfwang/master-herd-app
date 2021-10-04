@@ -16,3 +16,10 @@ export type locationType = {
   // Time the location was produced, in milliseconds since the unix epoch.
   time: number | null | undefined;
 };
+
+export type pathCoordinateType = {
+  // Longitude in degrees.
+  longitude: number;
+  // Latitude in degrees.
+  latitude: number;
+};
