@@ -12,9 +12,9 @@ import {
 } from "@ionic/react";
 import "leaflet/dist/leaflet.css";
 
-import GeolocatorForeground from "../components/GeolocatorForeground";
-import { locationType, pathCoordinateType } from "../types";
-import LeafletMap from "../components/LeafletMapHomePage";
+import GeolocatorForeground from "../../geolocators/GeolocatorForeground";
+import { locationType, pathCoordinateType } from "../../../types";
+import LeafletMap from "./LeafletMapHomePage";
 import "./Home.css";
 import { useEffect, useState } from "react";
 
@@ -80,7 +80,7 @@ const Home: React.FC<HomePageProps> = () => {
             <IonButtons slot="start">
               <IonMenuButton></IonMenuButton>
             </IonButtons>
-            <IonTitle size="large" style={titleStyle}>
+            <IonTitle size="large" className="titleStyle">
               Herd
             </IonTitle>
           </IonToolbar>
@@ -95,15 +95,6 @@ const Home: React.FC<HomePageProps> = () => {
       </IonPage>
     </>
   );
-};
-
-const titleStyle = {
-  position: "absolute",
-  top: 0,
-  left: 0,
-  width: "100vw",
-  height: "100vh",
-  textAlign: "center",
 };
 
 export default Home;

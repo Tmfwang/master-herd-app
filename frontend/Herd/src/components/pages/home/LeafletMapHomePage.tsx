@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
-import { locationType } from "../types";
+import { locationType } from "../../../types";
 import { MapContainer } from "react-leaflet";
 import L, { Map, Marker } from "leaflet";
-import icon from "leaflet/dist/images/marker-icon.png";
-import iconShadow from "leaflet/dist/images/marker-shadow.png";
-import userPositionIconImg from "../assets/GPSArrowIcon.png";
+import userPositionIconImg from "../../../assets/GPSArrowIcon.png";
 import "leaflet.offline";
 import "leaflet-rotatedmarker";
 

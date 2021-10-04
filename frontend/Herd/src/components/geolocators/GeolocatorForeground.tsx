@@ -1,6 +1,6 @@
 import { App } from "@capacitor/app";
 
-import { locationType } from "../types";
+import { locationType } from "../../types";
 import { registerPlugin } from "@capacitor/core";
 import { BackgroundGeolocationPlugin } from "@capacitor-community/background-geolocation";
 import { useEffect, useState } from "react";
@@ -14,7 +14,7 @@ interface GeolocatorProps {
 
 // This geolocator stops listening to location updates whenever the app is backgrounded.
 // This can be used to provide information like user orientation only when the
-// app is foregrounded (to save power and space)
+// app is foregrounded (to save power usage and storage space)
 const GeolocatorForeground: React.FC<GeolocatorProps> = ({
   latestLocationUpdateCallback,
 }) => {
