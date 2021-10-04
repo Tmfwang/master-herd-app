@@ -12,11 +12,11 @@ import {
 } from "@ionic/react";
 import "leaflet/dist/leaflet.css";
 
-import Geolocator from "../components/Geolocator";
-import { locationType } from "../types";
+import GeolocatorForeground from "../components/GeolocatorForeground";
+import { locationType, pathCoordinateType } from "../types";
 import LeafletMap from "../components/LeafletMapHomePage";
 import "./Home.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface HomePageProps {}
 
@@ -24,6 +24,22 @@ const Home: React.FC<HomePageProps> = () => {
   const [latestLocation, setLatestLocation] = useState<
     locationType | undefined
   >();
+
+  const [pathCoordinates, setPathCoordinates] = useState<pathCoordinateType[]>(
+    [] as pathCoordinateType[]
+  );
+
+  useEffect(() => {
+    if (latestLocation && latestLocation.longitude && latestLocation.latitude) {
+      setPathCoordinates([
+        ...pathCoordinates,
+        {
+          longitude: latestLocation.longitude,
+          latitude: latestLocation.latitude,
+        },
+      ]);
+    }
+  }, [latestLocation]);
 
   return (
     <>
@@ -53,6 +69,7 @@ const Home: React.FC<HomePageProps> = () => {
 
             <IonItem>{latestLocation?.latitude}</IonItem>
             <IonItem>{latestLocation?.bearing}</IonItem>
+            <IonItem>{pathCoordinates.length}</IonItem>
           </IonList>
         </IonContent>
       </IonMenu>
@@ -69,7 +86,10 @@ const Home: React.FC<HomePageProps> = () => {
           </IonToolbar>
         </IonHeader>
         <IonContent fullscreen>
-          <Geolocator latestLocationUpdateCallback={setLatestLocation} />
+          <GeolocatorForeground
+            latestLocationUpdateCallback={setLatestLocation}
+          />
+
           <LeafletMap latestLocation={latestLocation}></LeafletMap>
         </IonContent>
       </IonPage>
@@ -81,8 +101,8 @@ const titleStyle = {
   position: "absolute",
   top: 0,
   left: 0,
-  width: "100%",
-  height: "100%",
+  width: "100vw",
+  height: "100vh",
   textAlign: "center",
 };
 
