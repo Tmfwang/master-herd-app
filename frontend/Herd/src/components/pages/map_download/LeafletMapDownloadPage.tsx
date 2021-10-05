@@ -103,7 +103,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ latestLocation }) => {
         "https://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=topo4&zoom={z}&x={x}&y={y}",
         {
           attribution: '<a href="http://www.kartverket.no/">Kartverket</a>',
-          minZoom: 11,
+          minZoom: 12,
           maxZoom: 15,
         }
       );
@@ -144,7 +144,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ latestLocation }) => {
   // Runs when the download map button is clicked. Here is where the map tiles are downloaded.
   const handleDownloadMapButtonClicked = () => {
     if (map && tileLayer) {
-      const minZoomlevel = 11;
+      const minZoomlevel = 12;
       const maxZoomLevel = 15;
       const latlngBounds = map.getBounds();
       let tiles = [] as any[];
@@ -194,6 +194,22 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ latestLocation }) => {
   }
 
   async function downloadSingleTile(tile: any) {
+    // Method to give an error message to the user if map tile downloading failed
+    const handleFailedDownload = () => {
+      if (totalTilesRef.current > 0) {
+        totalTilesRef.current = 0;
+        tilesDownloadedRef.current = 0;
+
+        setTileProgressOpen(false);
+
+        presentToast({
+          header: "Noe gikk galt",
+          message: "Sjekk at du har tilgang til internett, og prøv igjen",
+          duration: 5000,
+        });
+      }
+    };
+
     if (totalTilesRef.current > 0) {
       // @ts-ignore
       downloadTile(tile.url)
@@ -234,15 +250,11 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ latestLocation }) => {
               }
             })
             .catch((err: any) => {
-              tilesDownloadedRef.current = 0;
-              totalTilesRef.current = 0;
-              setDownloadFailed(true);
+              handleFailedDownload();
             })
         )
         .catch((err: any) => {
-          tilesDownloadedRef.current = 0;
-          totalTilesRef.current = 0;
-          setDownloadFailed(true);
+          handleFailedDownload();
         });
     }
   }

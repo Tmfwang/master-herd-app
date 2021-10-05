@@ -10,6 +10,7 @@ import {
   IonList,
   IonItem,
   useIonAlert,
+  useIonToast,
 } from "@ionic/react";
 import "leaflet/dist/leaflet.css";
 import GeolocatorForeground from "../../geolocators/GeolocatorMock";
@@ -36,6 +37,7 @@ const Home: React.FC<HomePageProps> = () => {
   );
 
   const [presentAlert] = useIonAlert();
+  const [presentToast] = useIonToast();
 
   useEffect(() => {
     if (latestLocation && latestLocation.longitude && latestLocation.latitude) {
@@ -65,7 +67,23 @@ const Home: React.FC<HomePageProps> = () => {
           {
             text: "Slett",
             handler: (d) => {
-              truncate();
+              truncate()
+                .then(
+                  presentToast({
+                    header: "Kartutsnittene ble slettet",
+                    message:
+                      storageLength +
+                      " kartruter har blitt slettet fra din mobil",
+                    duration: 7000,
+                  })
+                )
+                .catch((err: any) => {
+                  presentToast({
+                    header: "Noe gikk galt",
+                    message: "Prøv igjen senere",
+                    duration: 5000,
+                  });
+                });
             },
           },
         ],

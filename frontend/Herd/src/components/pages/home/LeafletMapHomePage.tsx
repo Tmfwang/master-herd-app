@@ -78,7 +78,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ latestLocation }) => {
         "https://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=topo4&zoom={z}&x={x}&y={y}",
         {
           attribution: '<a href="http://www.kartverket.no/">Kartverket</a>',
-          minZoom: 11,
+          minZoom: 12,
           maxZoom: 15,
         }
       );
