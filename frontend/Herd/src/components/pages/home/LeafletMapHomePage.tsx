@@ -29,6 +29,12 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ latestLocation }) => {
       latestLocation?.longitude &&
       latestLocation.bearing
     ) {
+      // Recalibrates the map size if the current height or width is 0
+      const mapSize = map.getSize();
+      if (!mapSize["x"] || !mapSize["y"]) {
+        map.invalidateSize();
+      }
+
       if (!userPositionMarker) {
         // Adds marker at user's location
         const newUserMarker = L.marker(
@@ -63,7 +69,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ latestLocation }) => {
     // Updates the device size dimensions known to the leaflet map; won't display correctly if this is not done
     setTimeout(() => {
       map?.invalidateSize();
-    }, 1000);
+    }, 100);
 
     // Uses a special tilelayer that supports use of offline/downloaded tiles
     if (map) {
@@ -73,7 +79,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ latestLocation }) => {
         {
           attribution: '<a href="http://www.kartverket.no/">Kartverket</a>',
           minZoom: 11,
-          maxZoom: 16,
+          maxZoom: 15,
         }
       );
       tileLayerOffline.addTo(map);

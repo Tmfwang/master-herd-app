@@ -2,7 +2,9 @@ import { Redirect, Route } from "react-router-dom";
 import { IonApp, IonRouterOutlet } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 
-import Home from "./components/pages/home/Home";
+import Home from "./components/pages/home/HomePage";
+import MapDownloadPage from "./components/pages/map_download/MapDownloadPage";
+
 import "./App.css";
 
 /* Core CSS required for Ionic components to work properly */
@@ -31,6 +33,9 @@ const App: React.FC = () => {
         <IonRouterOutlet>
           <Route exact path="/home">
             <Home />
+          </Route>
+          <Route exact path="/download-maps">
+            <MapDownloadPage />
           </Route>
           <Route exact path="/">
             <Redirect to="/home" />
