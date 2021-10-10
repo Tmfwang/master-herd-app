@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
-import "leaflet/dist/leaflet.css";
-import { locationType } from "../../../types";
+import React, { useEffect, useRef, useState } from "react";
+
+import { locationType, pathCoordinateType } from "../../../types";
+
+import L, { Map, Marker, Polyline } from "leaflet";
 import { MapContainer } from "react-leaflet";
-import L, { Map, Marker } from "leaflet";
-import userPositionIconImg from "../../../assets/GPSArrowIcon.png";
 import "leaflet.offline";
 import "leaflet-rotatedmarker";
+import "leaflet/dist/leaflet.css";
+import userPositionIconImg from "../../../assets/GPSArrowIcon.png";
+import crosshairIconImg from "../../../assets/CrosshairIcon.png";
 
 let userPositionIcon = L.icon({
   iconUrl: userPositionIconImg,
@@ -13,13 +16,28 @@ let userPositionIcon = L.icon({
   iconSize: new L.Point(80, 80),
 });
 
+let crosshairIcon = L.icon({
+  iconUrl: crosshairIconImg,
+  iconAnchor: [80 / 2, 80 / 2],
+  iconSize: new L.Point(80, 80),
+});
+
 interface LeafletMapProps {
   latestLocation: locationType | undefined;
+  crosshairLocation: pathCoordinateType | undefined;
+  setCrosshairLocation: (location: pathCoordinateType) => void;
 }
 
-const LeafletMap: React.FC<LeafletMapProps> = ({ latestLocation }) => {
+const LeafletMap: React.FC<LeafletMapProps> = ({
+  latestLocation,
+  crosshairLocation,
+  setCrosshairLocation,
+}) => {
   const [map, setMap] = useState<Map | undefined>();
   const [userPositionMarker, setUserPositionMarker] = useState<Marker<any>>();
+  const [crosshairMarker, setCrosshairMarker] = useState<Marker<any>>();
+  const [lineFromUserToCrosshair, setLineFromUserToCrosshair] =
+    useState<Polyline<any>>();
 
   // Creates marker for user position, and pans to user's position
   useEffect(() => {
@@ -29,6 +47,8 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ latestLocation }) => {
       latestLocation?.longitude &&
       latestLocation.bearing
     ) {
+      updateLineFromUserToCrosshair();
+
       // Recalibrates the map size if the current height or width is 0
       const mapSize = map.getSize();
       if (!mapSize["x"] || !mapSize["y"]) {
@@ -50,7 +70,10 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ latestLocation }) => {
 
         // Pans to user's location
         map.setView(
-          new L.LatLng(latestLocation.latitude, latestLocation.longitude),
+          new L.LatLng(
+            latestLocation.latitude + 0.01,
+            latestLocation.longitude
+          ),
           13
         );
       } else {
@@ -71,8 +94,8 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ latestLocation }) => {
       map?.invalidateSize();
     }, 250);
 
-    // Uses a special tilelayer that supports use of offline/downloaded tiles
     if (map) {
+      // Uses a special tilelayer that supports use of offline/downloaded tiles
       //@ts-ignore
       const tileLayerOffline = L.tileLayer.offline(
         "https://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=topo4&zoom={z}&x={x}&y={y}",
@@ -83,6 +106,25 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ latestLocation }) => {
         }
       );
       tileLayerOffline.addTo(map);
+
+      // Adds crosshair marker at center of screen
+      if (!crosshairMarker) {
+        const newCrosshairMarker = L.marker(map.getCenter(), {
+          icon: crosshairIcon,
+        });
+
+        newCrosshairMarker.addTo(map);
+
+        map.on("move", function (e) {
+          newCrosshairMarker.setLatLng(map.getCenter());
+          setCrosshairLocation({
+            latitude: map.getCenter().lat,
+            longitude: map.getCenter().lng,
+          });
+        });
+
+        setCrosshairMarker(newCrosshairMarker);
+      }
     }
 
     if (
@@ -98,6 +140,29 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ latestLocation }) => {
       );
     }
   }, [map]);
+
+  useEffect(() => {
+    updateLineFromUserToCrosshair();
+  }, [crosshairLocation]);
+
+  const updateLineFromUserToCrosshair = () => {
+    if (userPositionMarker && crosshairMarker && map) {
+      if (lineFromUserToCrosshair) {
+        lineFromUserToCrosshair.setLatLngs([
+          userPositionMarker.getLatLng(),
+          crosshairMarker.getLatLng(),
+        ]);
+      } else {
+        const polyline = L.polyline(
+          [userPositionMarker.getLatLng(), crosshairMarker.getLatLng()],
+          { color: "black", opacity: 0.7, dashArray: [10, 10] }
+        );
+
+        polyline.addTo(map);
+        setLineFromUserToCrosshair(polyline);
+      }
+    }
+  };
 
   return (
     <MapContainer

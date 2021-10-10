@@ -4,6 +4,7 @@ import { IonReactRouter } from "@ionic/react-router";
 
 import Home from "./components/pages/home/HomePage";
 import MapDownloadPage from "./components/pages/map_download/MapDownloadPage";
+import SupervisionPage from "./components/pages/supervision/SupervisionPage";
 
 import "./App.css";
 
@@ -37,6 +38,10 @@ const App: React.FC = () => {
           <Route exact path="/download-maps">
             <MapDownloadPage />
           </Route>
+          <Route exact path="/new-supervision">
+            <SupervisionPage />
+          </Route>
+
           <Route exact path="/">
             <Redirect to="/home" />
           </Route>

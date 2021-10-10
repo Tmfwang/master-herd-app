@@ -1,19 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
-import "leaflet/dist/leaflet.css";
+
+import BottomCenterButton from "../../shared/BottomCenterButton";
+
 import { locationType } from "../../../types";
-import { MapContainer } from "react-leaflet";
+
+import { IonLoading, useIonAlert, useIonToast } from "@ionic/react";
+import { downloadOutline } from "ionicons/icons";
+
 import L, { Map, Marker } from "leaflet";
-import userPositionIconImg from "../../../assets/GPSArrowIcon.png";
+import { MapContainer } from "react-leaflet";
 import "leaflet.offline";
 import "leaflet-rotatedmarker";
-import {
-  IonButton,
-  IonIcon,
-  IonLoading,
-  useIonAlert,
-  useIonToast,
-} from "@ionic/react";
-import { downloadOutline } from "ionicons/icons";
+import "leaflet/dist/leaflet.css";
+import userPositionIconImg from "../../../assets/GPSArrowIcon.png";
 
 // @ts-ignore
 import { getTileUrls } from "leaflet.offline";
@@ -23,8 +22,8 @@ import { downloadTile, saveTile } from "leaflet.offline/src/TileManager";
 
 let userPositionIcon = L.icon({
   iconUrl: userPositionIconImg,
-  iconAnchor: [50 / 2, 50 / 2],
-  iconSize: new L.Point(50, 50),
+  iconAnchor: [80 / 2, 80 / 2],
+  iconSize: new L.Point(80, 80),
 });
 
 interface LeafletMapProps {
@@ -40,8 +39,6 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ latestLocation }) => {
   const tilesDownloadedRef = useRef<number>(0);
   const [tileProgressOpen, setTileProgressOpen] = useState<boolean>(false);
   const loaderRef = useRef<HTMLIonLoadingElement>(null);
-
-  const [downloadFailed, setDownloadFailed] = useState<boolean>(false);
 
   const [presentAlert] = useIonAlert();
   const [presentToast] = useIonToast();
@@ -94,7 +91,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ latestLocation }) => {
     // Updates the device size dimensions known to the leaflet map; won't display correctly if this is not done
     setTimeout(() => {
       map?.invalidateSize();
-    }, 100);
+    }, 250);
 
     // Uses a special tilelayer that supports use of offline/downloaded tiles
     if (map) {
@@ -125,22 +122,6 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ latestLocation }) => {
     }
   }, [map]);
 
-  // Gives an error message to the user if map downloading failed
-  useEffect(() => {
-    if (downloadFailed) {
-      tilesDownloadedRef.current = 0;
-      totalTilesRef.current = 0;
-      presentToast({
-        header: "Noe gikk galt",
-        message: "Sjekk at du har tilgang til internett, og prøv igjen",
-        duration: 5000,
-      });
-
-      setTileProgressOpen(false);
-      setDownloadFailed(false);
-    }
-  }, [downloadFailed]);
-
   // Runs when the download map button is clicked. Here is where the map tiles are downloaded.
   const handleDownloadMapButtonClicked = () => {
     if (map && tileLayer) {
@@ -168,7 +149,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ latestLocation }) => {
         message:
           "Ønsker du å laste ned de " +
           tiles.length +
-          ' kartrutene som utgjør kartområdet på skjermen? Disse kan når som helst slettes ved å trykke på "Slett nedlastede kart" fra alternativene i sidemenyen. Du kan teste ut det nedlastede kartutsnittet ved å skru av internett på mobilen din.',
+          ' kartrutene som utgjør kartområdet på skjermen? Disse kan når som helst slettes ved å trykke på "Slett nedlastede kart" fra alternativene i sidemenyen. Du kan teste ut alle de nedlastede kartutsnittene ved å skru av internett på mobilen din.',
         buttons: [
           "Avbryt",
           {
@@ -194,7 +175,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ latestLocation }) => {
   }
 
   async function downloadSingleTile(tile: any) {
-    // Method to give an error message to the user if map tile downloading failed
+    // Method to give an error message to the user if map tile downloading failed:
     const handleFailedDownload = () => {
       if (totalTilesRef.current > 0) {
         totalTilesRef.current = 0;
@@ -267,7 +248,6 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ latestLocation }) => {
         zoom={13}
         scrollWheelZoom={false}
         whenCreated={setMap}
-        rotate={true}
       ></MapContainer>
 
       <IonLoading
@@ -277,21 +257,12 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ latestLocation }) => {
         backdropDismiss={false}
       />
 
-      <div
-        style={{
-          zIndex: 9999,
-          position: "absolute",
-          display: "flex",
-          justifyContent: "center",
-          width: "100vw",
-          top: "90vh",
-        }}
-      >
-        <IonButton color="primary" onClick={handleDownloadMapButtonClicked}>
-          <IonIcon slot="start" icon={downloadOutline} />
-          Last ned dette kartutsnittet
-        </IonButton>
-      </div>
+      <BottomCenterButton
+        buttonText="Last ned dette kartutsnittet"
+        buttonIcon={downloadOutline}
+        buttonIconSlotPosition="start"
+        onClick={handleDownloadMapButtonClicked}
+      />
     </div>
   );
 };
