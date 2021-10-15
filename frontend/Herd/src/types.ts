@@ -23,3 +23,79 @@ export type pathCoordinateType = {
   // Latitude in degrees.
   latitude: number;
 };
+
+export type observationButtonType = {
+  // The textual content of the button
+  textContent: string;
+
+  // An ID identifying the button that is active
+  buttonId: string;
+};
+
+export type numberButtonType = {
+  // The textual label of the button
+  textLabel: string;
+
+  // An ID identifying the button that is active
+  buttonId: string;
+
+  currentValue: number;
+};
+
+export type observationDetailsType = {
+  alle: {
+    typeObservasjon: string;
+  };
+
+  gruppeSau: {
+    fargePaSau: { hvitOrGra: number; brun: number; sort: number };
+    fargePaEiermerke: {
+      rod: number;
+      bla: number;
+      gul: number;
+      gronn: number;
+    };
+  };
+
+  soye: {
+    fargePaSau: { hvitOrGra: number; brun: number; sort: number };
+    fargePaBjelleslips: {
+      rod: number;
+      bla: number;
+      gulOrIngen: number;
+      gronn: number;
+    };
+    fargePaEiermerke: {
+      rod: number;
+      bla: number;
+      gul: number;
+      gronn: number;
+    };
+  };
+
+  lam: {
+    fargePaSau: { hvitOrGra: number; brun: number; sort: number };
+    fargePaEiermerke: {
+      rod: number;
+      bla: number;
+      gul: number;
+      gronn: number;
+    };
+  };
+
+  rovdyr: {
+    typeRovdyr: string;
+  };
+
+  skadetSau: {
+    typeSkade: string;
+    fargePaSau: string;
+    fargePaEiermerke: string;
+  };
+
+  dodSau: {
+    dodsarsak: string;
+    fargePaSau: string;
+    fargePaEiermerke: string;
+  };
+};

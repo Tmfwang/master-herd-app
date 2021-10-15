@@ -68,7 +68,7 @@ const GeolocatorForeground: React.FC<GeolocatorProps> = ({
               BackgroundGeolocation.openSettings();
             }
           }
-          alert(error);
+
           return console.error(error);
         }
 
