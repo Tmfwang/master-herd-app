@@ -16,7 +16,15 @@ const BottomCenterButton: React.FC<BottomCenterButtonProps> = ({
 }) => {
   return (
     <div style={buttonContainerStyle}>
-      <IonButton color="primary" onClick={onClick}>
+      <IonButton
+        color="primary"
+        onClick={onClick}
+        size="large"
+        style={{
+          boxShadow: "5px 5px 5px rgba(0, 0, 0, 0.25)",
+          fontSize: "16px",
+        }}
+      >
         <IonIcon slot={buttonIconSlotPosition} icon={buttonIcon} />
         {buttonText}
       </IonButton>
@@ -30,7 +38,7 @@ const buttonContainerStyle = {
   display: "flex",
   justifyContent: "center",
   width: "100vw",
-  top: "90vh",
+  top: "88vh",
 };
 
 export default BottomCenterButton;
