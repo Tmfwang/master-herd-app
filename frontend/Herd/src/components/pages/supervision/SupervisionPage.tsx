@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
 
+import { Storage } from "@capacitor/storage";
+
+import { useHistory } from "react-router-dom";
+
 import {
   IonContent,
   IonHeader,
@@ -10,10 +14,13 @@ import {
   IonMenuButton,
   useIonAlert,
   useIonToast,
+  useIonViewDidEnter,
+  useIonViewWillLeave,
 } from "@ionic/react";
 import { locateOutline } from "ionicons/icons";
 
-import MainHamburgerMenu from "../../shared/MainHamburgerMenu";
+import CurrentObservationsModal from "./CurrentObservationsModal";
+import SupervisionHamburgerMenu from "./SupervisionHamburgerMenu";
 import BottomCenterButton from "../../shared/BottomCenterButton";
 import SupervisionModal from "./SupervisionModal";
 
@@ -21,7 +28,13 @@ import GeolocatorForeground from "../../geolocators/GeolocatorForeground";
 import GeolocatorPathTracking from "../../geolocators/Geolocator";
 import LeafletMap from "./LeafletMapSupervisionPage";
 
-import { locationType, pathCoordinateType } from "../../../types";
+import {
+  locationType,
+  pathCoordinateType,
+  observationDetailsType,
+  fullObservationType,
+  supervisionType,
+} from "../../../types";
 
 import "leaflet/dist/leaflet.css";
 import "./SupervisionPage.css";
@@ -29,7 +42,21 @@ import "./SupervisionPage.css";
 interface SupervisionPageProps {}
 
 const SupervisionPage: React.FC<SupervisionPageProps> = () => {
-  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  let history = useHistory();
+
+  const [presentAlert] = useIonAlert();
+  const [presentToast] = useIonToast();
+
+  const [newObservationModalOpen, setNewObservationModalOpen] =
+    useState<boolean>(false);
+  const [currentObservationsModalOpen, setCurrentObservationsModalOpen] =
+    useState<boolean>(false);
+
+  const [whenStarted, setWhenStarted] = useState<string>("");
+
+  const [allObservations, setAllObservations] = useState<fullObservationType[]>(
+    []
+  );
 
   const [crosshairLocation, setCrosshairLocation] =
     useState<pathCoordinateType>();
@@ -45,6 +72,25 @@ const SupervisionPage: React.FC<SupervisionPageProps> = () => {
   const [pathCoordinates, setPathCoordinates] = useState<pathCoordinateType[]>(
     [] as pathCoordinateType[]
   );
+
+  useIonViewDidEnter(() => {
+    setWhenStarted(new Date().toISOString());
+
+    presentToast({
+      header: "Tilsynstur påbegynt",
+      message:
+        "Du kan nå bruke kartet til å registrere ulike observasjoner under denne tilsynsturen. Du kan fullføre eller avbryte tilsynsturen via sidemenyen.",
+      duration: 8000,
+    });
+  });
+
+  useIonViewWillLeave(() => {
+    setAllObservations([]);
+    setWhenStarted("");
+    setLatestPathLocation(undefined);
+    setLatestBearingLocation(undefined);
+    setPathCoordinates([]);
+  });
 
   // Legger nye path-koordinater til i listen
   useEffect(() => {
@@ -63,9 +109,117 @@ const SupervisionPage: React.FC<SupervisionPageProps> = () => {
     }
   }, [latestPathLocation]);
 
+  const saveObservation = (observationDetails: observationDetailsType) => {
+    let newObservation: fullObservationType = {
+      observationDetails: observationDetails,
+      observationLocation: {
+        latitude: crosshairLocation!.latitude,
+        longitude: crosshairLocation!.longitude,
+      },
+      userLocation: {
+        latitude: latestPathLocation!.latitude!,
+        longitude: latestPathLocation!.longitude!,
+      },
+      whenRegisteredDateTime: new Date().toISOString(),
+    };
+
+    let newAllObservations = [...allObservations, newObservation];
+    setAllObservations(newAllObservations);
+
+    presentToast({
+      header: "Observasjonen ble registrert",
+      duration: 4000,
+    });
+  };
+
+  const saveAndEndSupervision = async () => {
+    presentAlert({
+      header: "Fullfør tilsynstur?",
+      message:
+        "Ønsker du å fullføre og lagre denne tilsynsturen? Du har registrert " +
+        allObservations.length +
+        (allObservations.length === 1 ? " observasjon" : " observasjoner") +
+        " under denne tilsynsturen.",
+      buttons: [
+        "Nei",
+        {
+          text: "Ja",
+          handler: (d) => {
+            saveSupervision();
+          },
+        },
+      ],
+    });
+
+    const saveSupervision = async () => {
+      let allSupervisions = [] as supervisionType[];
+      const { value } = await Storage.get({ key: "allSupervisions" });
+
+      if (value) {
+        try {
+          allSupervisions = JSON.parse(value);
+        } catch (err) {}
+      }
+
+      allSupervisions.push({
+        allObservations: allObservations,
+        fullPath: pathCoordinates,
+        whenStarted: whenStarted,
+        whenEnded: new Date().toISOString(),
+      });
+
+      await Storage.set({
+        key: "allSupervisions",
+        value: JSON.stringify(allSupervisions),
+      });
+
+      presentToast({
+        header: "Tilsynstur fullført",
+        message: "Tilsynsturen ble fullført og lagret.",
+        duration: 5000,
+      });
+
+      history.push("/");
+    };
+  };
+
+  const cancelSupervision = () => {
+    presentAlert({
+      header: "Avbryt tilsynstur?",
+      message:
+        "Ønsker du å avbryte denne tilsynsturen?" +
+        (allObservations.length > 0
+          ? " Du vil miste " +
+            (allObservations.length === 1
+              ? "den éne observasjonen"
+              : "de " + allObservations.length + " observasjonene") +
+            " du har registrert."
+          : ""),
+      buttons: [
+        "Nei",
+        {
+          text: "Ja",
+          handler: (d) => {
+            presentToast({
+              header: "Tilsynstur avbrutt",
+              message:
+                "Tilsynsturen ble avbrutt og eventuelle observasjoner som ble gjort under tilsynsturen har blitt fjernet.",
+              duration: 7000,
+            });
+            history.push("/");
+          },
+        },
+      ],
+    });
+  };
+
   return (
     <>
-      <MainHamburgerMenu />
+      <SupervisionHamburgerMenu
+        finishSupervision={() => saveAndEndSupervision()}
+        cancelSupervision={() => cancelSupervision()}
+        seeCurrentObservations={() => setCurrentObservationsModalOpen(true)}
+      />
 
       <IonPage id="main-content">
         <IonHeader>
@@ -90,23 +244,28 @@ const SupervisionPage: React.FC<SupervisionPageProps> = () => {
             latestLocation={latestBearingLocation}
             crosshairLocation={crosshairLocation}
             setCrosshairLocation={setCrosshairLocation}
+            pathCoordinates={pathCoordinates}
           ></LeafletMap>
 
           <BottomCenterButton
             buttonText="Ny observasjon"
             buttonIcon={locateOutline}
             buttonIconSlotPosition="start"
-            onClick={() => setModalOpen(true)}
+            onClick={() => setNewObservationModalOpen(true)}
           />
 
           <SupervisionModal
-            modalOpen={modalOpen}
-            setModalOpen={setModalOpen}
-            observationLocation={crosshairLocation}
-            userLocation={
-              pathCoordinates.length > 0 ? pathCoordinates[pathCoordinates.length-1] : undefined
-            }
+            modalOpen={newObservationModalOpen}
+            setModalOpen={setNewObservationModalOpen}
+            saveObservation={saveObservation}
           ></SupervisionModal>
+
+          <CurrentObservationsModal
+            modalOpen={currentObservationsModalOpen}
+            setModalOpen={setCurrentObservationsModalOpen}
+            allObservations={allObservations}
+            pathCoordinates={pathCoordinates}
+          ></CurrentObservationsModal>
         </IonContent>
       </IonPage>
     </>
