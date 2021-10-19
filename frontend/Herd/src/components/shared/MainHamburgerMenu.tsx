@@ -19,7 +19,7 @@ import { getStorageLength } from "leaflet.offline/src/TileManager";
 
 interface MainHamburgerMenuProps {}
 
-const MainHamburgerMenu: React.FC<MainHamburgerMenuProps> = ({}) => {
+const MainHamburgerMenu: React.FC<MainHamburgerMenuProps> = () => {
   const [presentAlert] = useIonAlert();
   const [presentToast] = useIonToast();
 

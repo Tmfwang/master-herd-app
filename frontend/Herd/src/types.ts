@@ -99,3 +99,25 @@ export type observationDetailsType = {
     fargePaEiermerke: string;
   };
 };
+
+export type fullObservationType = {
+  observationDetails: observationDetailsType;
+  observationLocation: {
+    longitude: number;
+    latitude: number;
+  };
+  userLocation: {
+    longitude: number;
+    latitude: number;
+  };
+  whenRegisteredDateTime: string;
+};
+
+export type supervisionType = {
+  allObservations: fullObservationType[];
+  fullPath: pathCoordinateType[];
+  whenStarted: string;
+  whenEnded: string;
+};
+
+

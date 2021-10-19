@@ -9,7 +9,7 @@ import {
   IonModal,
   IonButton,
   IonicSwiper,
-  useIonToast,
+  useIonAlert,
 } from "@ionic/react";
 import {
   arrowForwardOutline,
@@ -21,11 +21,7 @@ import ObservationButtonGroup from "./ObservationButtonGroup";
 import BottomNavigationButtons from "./BottomNavigationButtons";
 import NumberButtons from "./NumberButtons";
 
-import {
-  locationType,
-  pathCoordinateType,
-  observationDetailsType,
-} from "../../../types";
+import { observationDetailsType } from "../../../types";
 
 import "leaflet/dist/leaflet.css";
 import "./SupervisionPage.css";
@@ -49,6 +45,7 @@ const allSheepColorTypes = {
   hvitOrGra: "hvitOrGra",
   brun: "brun",
   sort: "sort",
+  ikkeSpesifisert: "ikkeSpesifisert",
 };
 
 const allOwnerColorTypes = {
@@ -56,6 +53,7 @@ const allOwnerColorTypes = {
   bla: "bla",
   gul: "gul",
   gronn: "gronn",
+  ikkeSpesifisert: "ikkeSpesifisert",
 };
 
 const allTieColorTypes = {
@@ -63,6 +61,31 @@ const allTieColorTypes = {
   bla: "bla",
   gulOrIngen: "gulOrIngen",
   gronn: "gronn",
+};
+
+const allPredatorTypes = {
+  jerv: "jerv",
+  gaupe: "gaupe",
+  bjorn: "bjorn",
+  ulv: "ulv",
+  orn: "orn",
+  annet: "annet",
+};
+
+const allSheepDamageTypes = {
+  halter: "halter",
+  blor: "blor",
+  hodeskade: "hodeskade",
+  kroppskade: "kroppskade",
+  annet: "annet",
+};
+
+const allSheepCausesOfDeathTypes = {
+  sykdom: "sykdom",
+  rovdyr: "rovdyr",
+  fallulykke: "fallulykke",
+  drukningsulykke: "drukningsulykke",
+  annet: "annet",
 };
 
 const allModalSlidesId = {
@@ -82,6 +105,15 @@ const allModalSlidesId = {
   dodSauFargePaSau: 13,
   dodSauFargePaEiermerke: 14,
 };
+
+const allFinalModalSlidesId = [
+  allModalSlidesId["gruppeSauFargePaEiermerke"],
+  allModalSlidesId["soyeFargePaEiermerke"],
+  allModalSlidesId["lamFargePaEiermerke"],
+  allModalSlidesId["rovdyrType"],
+  allModalSlidesId["skadetSauFargePaEiermerke"],
+  allModalSlidesId["dodSauFargePaEiermerke"],
+];
 
 const allModalSlidesHeaders = [
   "Type observasjon",
@@ -148,31 +180,29 @@ const defaultObservationDetails: observationDetailsType = {
 
   skadetSau: {
     typeSkade: "",
-    fargePaSau: "",
-    fargePaEiermerke: "",
+    fargePaSau: "ikkeSpesifisert",
+    fargePaEiermerke: "ikkeSpesifisert",
   },
 
   dodSau: {
     dodsarsak: "",
-    fargePaSau: "",
-    fargePaEiermerke: "",
+    fargePaSau: "ikkeSpesifisert",
+    fargePaEiermerke: "ikkeSpesifisert",
   },
 };
 
 interface SupervisionModalProps {
   modalOpen: boolean;
   setModalOpen: (isOpen: boolean) => void;
-  observationLocation: pathCoordinateType | undefined;
-  userLocation: pathCoordinateType | undefined;
+  saveObservation: (observationDetails: observationDetailsType) => void;
 }
 
 const SupervisionModal: React.FC<SupervisionModalProps> = ({
   modalOpen,
   setModalOpen,
-  observationLocation,
-  userLocation,
+  saveObservation,
 }) => {
-  const [presentToast] = useIonToast();
+  const [presentAlert] = useIonAlert();
 
   const [observationDetails, setObservationDetails] =
     useState<observationDetailsType>(
@@ -258,20 +288,11 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
 
   const goToNextSlide = () => {
     if (swiperInstance) {
+      let oldActiveSlide = swiperInstance.activeIndex;
       let activeSlide = swiperInstance.activeIndex;
 
-      // Keeps track of the slide index history
-      const newSlideIndexHistory = [...slideIndexHistory, activeSlide];
-      setSlideIndexHistory(newSlideIndexHistory);
-
-      // Keeps track of the slide content (i.e. state variables) history
-      setSlideContentHistory([...slideContentHistory, observationDetails]);
-
-      const currentObservationType =
-        observationDetails["alle"]["typeObservasjon"];
-
       if (activeSlide === allModalSlidesId["typeObservasjon"]) {
-        switch (currentObservationType) {
+        switch (observationDetails["alle"]["typeObservasjon"]) {
           case allObservationTypes.gruppeSau:
             activeSlide = allModalSlidesId["gruppeSauFargePaSau"];
             break;
@@ -289,43 +310,27 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
             break;
 
           case allObservationTypes.skadetSau:
-            activeSlide = allModalSlidesId["skadetSauFargePaSau"];
+            activeSlide = allModalSlidesId["skadetSauTypeSkade"];
             break;
 
           case allObservationTypes.dodSau:
-            activeSlide = allModalSlidesId["dodSauFargePaSau"];
+            activeSlide = allModalSlidesId["dodSauDodsarsak"];
             break;
         }
+      } else if (allFinalModalSlidesId.includes(activeSlide)) {
+        saveObservation(observationDetails);
+        setModalOpen(false);
+        return;
       } else {
-        switch (activeSlide) {
-          case allModalSlidesId["gruppeSauFargePaEiermerke"]:
-            return;
-            break;
-
-          case allModalSlidesId["soyeFargePaEiermerke"]:
-            return;
-            break;
-
-          case allModalSlidesId["lamFargePaEiermerke"]:
-            return;
-            break;
-
-          case allModalSlidesId["rovdyrType"]:
-            return;
-            break;
-
-          case allModalSlidesId["skadetSauFargePaEiermerke"]:
-            return;
-            break;
-
-          case allModalSlidesId["dodSauFargePaEiermerke"]:
-            return;
-            break;
-
-          default:
-            activeSlide = activeSlide + 1;
-        }
+        activeSlide = activeSlide + 1;
       }
+
+      // Keeps track of the slide index history
+      const newSlideIndexHistory = [...slideIndexHistory, oldActiveSlide];
+      setSlideIndexHistory(newSlideIndexHistory);
+
+      // Keeps track of the slide content (i.e. state variables) history
+      setSlideContentHistory([...slideContentHistory, observationDetails]);
 
       setModalTitle(allModalSlidesHeaders[activeSlide]);
       swiperInstance.slideTo(activeSlide, 250);
@@ -345,14 +350,31 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
       }
 
       // Uses the slide content history to go to the previous variables state
-      // const newSlideContentHistory = [...slideContentHistory];
-      // const previousSlideContent = newSlideContentHistory.pop();
+      const newSlideContentHistory = [...slideContentHistory];
+      const previousSlideContent = newSlideContentHistory.pop();
 
-      // if (previousSlideContent !== undefined) {
-      //   setObservationDetails(JSON.parse(JSON.stringify(previousSlideContent)));
-      //   setSlideContentHistory(newSlideContentHistory);
-      // }
+      if (previousSlideContent !== undefined) {
+        setObservationDetails(JSON.parse(JSON.stringify(previousSlideContent)));
+        setSlideContentHistory(newSlideContentHistory);
+      }
     }
+  };
+
+  const confirmObservationSave = (confirmationMessage: string) => {
+    presentAlert({
+      header: "Fullfør observasjon?",
+      message: confirmationMessage,
+      buttons: [
+        "Nei",
+        {
+          text: "Ja",
+          handler: (d) => {
+            saveObservation(observationDetails);
+            setModalOpen(false);
+          },
+        },
+      ],
+    });
   };
 
   return (
@@ -482,6 +504,11 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
                 finishButtonLabel="Fullfør observasjon"
                 finishButtonIcon={checkmarkOutline}
                 finishButtonDisabled={calculateTotalSheep() === 0}
+                finishButtonOnClick={() =>
+                  confirmObservationSave(
+                    "Ønsker du å fullføre observasjonen? Du kan fremdeles registrere fargene på sauenes eiermerker."
+                  )
+                }
               ></BottomNavigationButtons>
             </div>
           </SwiperSlide>
@@ -599,6 +626,11 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
                 finishButtonLabel="Fullfør observasjon"
                 finishButtonIcon={checkmarkOutline}
                 finishButtonDisabled={calculateTotalSheep() === 0}
+                finishButtonOnClick={() =>
+                  confirmObservationSave(
+                    "Ønsker du å fullføre observasjonen? Du kan fremdeles registrere fargene på søyenes bjelleslips og eiermerker."
+                  )
+                }
               ></BottomNavigationButtons>
             </div>
           </SwiperSlide>
@@ -663,6 +695,11 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
                 nextButtonDisabled={calculateTotalSheep() === 0}
                 finishButtonLabel="Fullfør observasjon"
                 finishButtonIcon={checkmarkOutline}
+                finishButtonOnClick={() =>
+                  confirmObservationSave(
+                    "Ønsker du å fullføre observasjonen? Du kan fremdeles registrere fargene på søyenes eiermerker."
+                  )
+                }
               ></BottomNavigationButtons>
             </div>
           </SwiperSlide>
@@ -728,31 +765,467 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
           </SwiperSlide>
 
           {/* LAM -> FARGE PÅ SAU */}
-          <SwiperSlide>6</SwiperSlide>
+          <SwiperSlide>
+            <div style={{ height: "100%", width: "100%" }}>
+              <NumberButtons
+                numberButtonList={[
+                  {
+                    textLabel: "Hvit/Grå",
+                    buttonId: allSheepColorTypes.hvitOrGra,
+                    currentValue:
+                      observationDetails["lam"]["fargePaSau"]["hvitOrGra"],
+                  },
+                  {
+                    textLabel: "Brun",
+                    buttonId: allSheepColorTypes.brun,
+                    currentValue:
+                      observationDetails["lam"]["fargePaSau"]["brun"],
+                  },
+                  {
+                    textLabel: "Sort",
+                    buttonId: allSheepColorTypes.sort,
+                    currentValue:
+                      observationDetails["lam"]["fargePaSau"]["sort"],
+                  },
+                ]}
+                onValueChange={(buttonId: string, newValue: number) => {
+                  setObservationField(
+                    ["lam", "fargePaSau", buttonId],
+                    newValue
+                  );
+                }}
+                counterTopText="Trykk for å legge til et lam med denne fargen"
+                counterBottomText="Hold inne i minst 1 sekund for å fjerne et lam med denne fargen"
+              ></NumberButtons>
+              <BottomNavigationButtons
+                prevButtonLabel="Tilbake"
+                prevButtonOnClick={() => {
+                  goToPreviousSlide();
+                }}
+                prevButtonIcon={arrowBackOutline}
+                nextButtonLabel="Eiermerke"
+                nextButtonOnClick={() => goToNextSlide()}
+                nextButtonIcon={arrowForwardOutline}
+                nextButtonDisabled={calculateTotalSheep() === 0}
+                finishButtonLabel="Fullfør observasjon"
+                finishButtonIcon={checkmarkOutline}
+                finishButtonDisabled={calculateTotalSheep() === 0}
+                finishButtonOnClick={() =>
+                  confirmObservationSave(
+                    "Ønsker du å fullføre observasjonen? Du kan fremdeles registrere fargene på lammenes eiermerker."
+                  )
+                }
+              ></BottomNavigationButtons>
+            </div>
+          </SwiperSlide>
 
           {/* LAM -> FARGE PÅ EIERMERKE */}
-          <SwiperSlide>7</SwiperSlide>
+          <SwiperSlide>
+            <div style={{ height: "100%", width: "100%" }}>
+              <NumberButtons
+                numberButtonList={[
+                  {
+                    textLabel: "Rød",
+                    buttonId: allOwnerColorTypes.rod,
+                    currentValue:
+                      observationDetails["lam"]["fargePaEiermerke"]["rod"],
+                  },
+                  {
+                    textLabel: "Blå",
+                    buttonId: allOwnerColorTypes.bla,
+                    currentValue:
+                      observationDetails["lam"]["fargePaEiermerke"]["bla"],
+                  },
+                  {
+                    textLabel: "Gul",
+                    buttonId: allOwnerColorTypes.gul,
+                    currentValue:
+                      observationDetails["lam"]["fargePaEiermerke"]["gul"],
+                  },
+                  {
+                    textLabel: "Grønn",
+                    buttonId: allOwnerColorTypes.gronn,
+                    currentValue:
+                      observationDetails["lam"]["fargePaEiermerke"]["gronn"],
+                  },
+                ]}
+                onValueChange={(buttonId: string, newValue: number) => {
+                  setObservationField(
+                    ["lam", "fargePaEiermerke", buttonId],
+                    newValue
+                  );
+                }}
+                maxTotalAmount={calculateTotalSheep()}
+                maxTotalAmountErrorMessage={
+                  "Du registrerte " +
+                  calculateTotalSheep() +
+                  " lam, og kan derfor ikke ha flere eiermerker enn dette."
+                }
+                counterTopText="Trykk for å legge til et eiermerke med denne fargen"
+                counterBottomText="Hold inne i minst 1 sekund for å fjerne et eiermerke med denne fargen"
+              ></NumberButtons>
+              <BottomNavigationButtons
+                prevButtonLabel="Tilbake"
+                prevButtonOnClick={() => {
+                  goToPreviousSlide();
+                }}
+                prevButtonIcon={arrowBackOutline}
+                nextButtonLabel="Fullfør"
+                nextButtonOnClick={() => goToNextSlide()}
+                nextButtonIcon={checkmarkOutline}
+                nextButtonDisabled={calculateTotalSheep() === 0}
+              ></BottomNavigationButtons>
+            </div>
+          </SwiperSlide>
 
           {/* ROVDYR -> TYPE ROVDYR */}
-          <SwiperSlide>8</SwiperSlide>
+          <SwiperSlide>
+            <div style={{ height: "100%", width: "100%" }}>
+              <ObservationButtonGroup
+                observationButtonList={[
+                  {
+                    textContent: "Jerv",
+                    buttonId: allPredatorTypes.jerv,
+                  },
+                  {
+                    textContent: "Gaupe",
+                    buttonId: allPredatorTypes.gaupe,
+                  },
+                  {
+                    textContent: "Bjørn",
+                    buttonId: allPredatorTypes.bjorn,
+                  },
+                  {
+                    textContent: "Ulv",
+                    buttonId: allPredatorTypes.ulv,
+                  },
+                  {
+                    textContent: "Ørn",
+                    buttonId: allPredatorTypes.orn,
+                  },
+                  {
+                    textContent: "Annet",
+                    buttonId: allPredatorTypes.annet,
+                  },
+                ]}
+                onActiveChange={(buttonId) =>
+                  setObservationField(["rovdyr", "typeRovdyr"], buttonId)
+                }
+                activeButton={observationDetails["rovdyr"]["typeRovdyr"]}
+              ></ObservationButtonGroup>
+
+              <BottomNavigationButtons
+                prevButtonLabel="Tilbake"
+                prevButtonOnClick={() => goToPreviousSlide()}
+                prevButtonIcon={arrowBackOutline}
+                nextButtonLabel="Fullfør"
+                nextButtonOnClick={() => goToNextSlide()}
+                nextButtonIcon={checkmarkOutline}
+                nextButtonDisabled={
+                  observationDetails["rovdyr"]["typeRovdyr"] === ""
+                }
+              ></BottomNavigationButtons>
+            </div>
+          </SwiperSlide>
 
           {/* SKADET SAU -> TYPE SKADE */}
-          <SwiperSlide>9</SwiperSlide>
+          <SwiperSlide>
+            <div style={{ height: "100%", width: "100%" }}>
+              <ObservationButtonGroup
+                observationButtonList={[
+                  {
+                    textContent: "Halter",
+                    buttonId: allSheepDamageTypes.halter,
+                  },
+                  {
+                    textContent: "Blør",
+                    buttonId: allSheepDamageTypes.blor,
+                  },
+                  {
+                    textContent: "Skade på hodet",
+                    buttonId: allSheepDamageTypes.hodeskade,
+                  },
+                  {
+                    textContent: "Skade på kropp",
+                    buttonId: allSheepDamageTypes.kroppskade,
+                  },
+                  {
+                    textContent: "Annet",
+                    buttonId: allSheepDamageTypes.annet,
+                  },
+                ]}
+                onActiveChange={(buttonId) =>
+                  setObservationField(["skadetSau", "typeSkade"], buttonId)
+                }
+                activeButton={observationDetails["skadetSau"]["typeSkade"]}
+              ></ObservationButtonGroup>
+
+              <BottomNavigationButtons
+                prevButtonLabel="Tilbake"
+                prevButtonOnClick={() => goToPreviousSlide()}
+                prevButtonIcon={arrowBackOutline}
+                nextButtonLabel="Sauefarge"
+                nextButtonOnClick={() => goToNextSlide()}
+                nextButtonIcon={arrowForwardOutline}
+                nextButtonDisabled={
+                  observationDetails["skadetSau"]["typeSkade"] === ""
+                }
+                finishButtonLabel="Fullfør observasjon"
+                finishButtonIcon={checkmarkOutline}
+                finishButtonDisabled={
+                  observationDetails["skadetSau"]["typeSkade"] === ""
+                }
+                finishButtonOnClick={() =>
+                  confirmObservationSave(
+                    "Ønsker du å fullføre observasjonen? Du kan fremdeles registrere fargen på sauen og eiermerket."
+                  )
+                }
+              ></BottomNavigationButtons>
+            </div>
+          </SwiperSlide>
 
           {/* SKADET SAU -> FARGE PÅ SAU */}
-          <SwiperSlide>10</SwiperSlide>
+          <SwiperSlide>
+            <div style={{ height: "100%", width: "100%" }}>
+              <div style={{ marginTop: "21.7%", marginBottom: "-25%" }}>
+                <ObservationButtonGroup
+                  observationButtonList={[
+                    {
+                      textContent: "Hvit/Grå",
+                      buttonId: allSheepColorTypes.hvitOrGra,
+                    },
+                    {
+                      textContent: "Brun",
+                      buttonId: allSheepColorTypes.brun,
+                    },
+                    {
+                      textContent: "Sort",
+                      buttonId: allSheepColorTypes.sort,
+                    },
+                    {
+                      textContent: "Ikke spesifisert",
+                      buttonId: allSheepColorTypes.ikkeSpesifisert,
+                    },
+                  ]}
+                  onActiveChange={(buttonId) =>
+                    setObservationField(["skadetSau", "fargePaSau"], buttonId)
+                  }
+                  activeButton={observationDetails["skadetSau"]["fargePaSau"]}
+                ></ObservationButtonGroup>
+              </div>
+
+              <BottomNavigationButtons
+                prevButtonLabel="Tilbake"
+                prevButtonOnClick={() => goToPreviousSlide()}
+                prevButtonIcon={arrowBackOutline}
+                nextButtonLabel="Eiermerke"
+                nextButtonOnClick={() => goToNextSlide()}
+                nextButtonIcon={arrowForwardOutline}
+                finishButtonLabel="Fullfør observasjon"
+                finishButtonIcon={checkmarkOutline}
+                finishButtonOnClick={() =>
+                  confirmObservationSave(
+                    "Ønsker du å fullføre observasjonen? Du kan fremdeles registrere fargen på sauens eiermerke."
+                  )
+                }
+              ></BottomNavigationButtons>
+            </div>
+          </SwiperSlide>
 
           {/* SKADET SAU -> FARGE PÅ EIERMERKE */}
-          <SwiperSlide>11</SwiperSlide>
+          <SwiperSlide>
+            <div style={{ height: "100%", width: "100%" }}>
+              <ObservationButtonGroup
+                observationButtonList={[
+                  {
+                    textContent: "Rød",
+                    buttonId: allOwnerColorTypes.rod,
+                  },
+                  {
+                    textContent: "Blå",
+                    buttonId: allOwnerColorTypes.bla,
+                  },
+                  {
+                    textContent: "Gul",
+                    buttonId: allOwnerColorTypes.gul,
+                  },
+                  {
+                    textContent: "Grønn",
+                    buttonId: allOwnerColorTypes.gronn,
+                  },
+                  {
+                    textContent: "Ikke spesifisert",
+                    buttonId: allOwnerColorTypes.ikkeSpesifisert,
+                  },
+                ]}
+                onActiveChange={(buttonId) =>
+                  setObservationField(
+                    ["skadetSau", "fargePaEiermerke"],
+                    buttonId
+                  )
+                }
+                activeButton={
+                  observationDetails["skadetSau"]["fargePaEiermerke"]
+                }
+              ></ObservationButtonGroup>
+
+              <BottomNavigationButtons
+                prevButtonLabel="Tilbake"
+                prevButtonOnClick={() => goToPreviousSlide()}
+                prevButtonIcon={arrowBackOutline}
+                nextButtonLabel="Fullfør"
+                nextButtonOnClick={() => goToNextSlide()}
+                nextButtonIcon={checkmarkOutline}
+              ></BottomNavigationButtons>
+            </div>
+          </SwiperSlide>
 
           {/* DØD SAU -> DØDSÅRSAK */}
-          <SwiperSlide>12</SwiperSlide>
+          <SwiperSlide>
+            <div style={{ height: "100%", width: "100%" }}>
+              <ObservationButtonGroup
+                observationButtonList={[
+                  {
+                    textContent: "Sykdom",
+                    buttonId: allSheepCausesOfDeathTypes.sykdom,
+                  },
+                  {
+                    textContent: "Rovdyr",
+                    buttonId: allSheepCausesOfDeathTypes.rovdyr,
+                  },
+                  {
+                    textContent: "Fallulykke",
+                    buttonId: allSheepCausesOfDeathTypes.fallulykke,
+                  },
+                  {
+                    textContent: "Druknings- ulykke",
+                    buttonId: allSheepCausesOfDeathTypes.drukningsulykke,
+                  },
+                  {
+                    textContent: "Annet",
+                    buttonId: allSheepCausesOfDeathTypes.annet,
+                  },
+                ]}
+                onActiveChange={(buttonId) =>
+                  setObservationField(["dodSau", "dodsarsak"], buttonId)
+                }
+                activeButton={observationDetails["dodSau"]["dodsarsak"]}
+              ></ObservationButtonGroup>
+
+              <BottomNavigationButtons
+                prevButtonLabel="Tilbake"
+                prevButtonOnClick={() => goToPreviousSlide()}
+                prevButtonIcon={arrowBackOutline}
+                nextButtonLabel="Sauefarge"
+                nextButtonOnClick={() => goToNextSlide()}
+                nextButtonIcon={arrowForwardOutline}
+                nextButtonDisabled={
+                  observationDetails["dodSau"]["dodsarsak"] === ""
+                }
+                finishButtonLabel="Fullfør observasjon"
+                finishButtonIcon={checkmarkOutline}
+                finishButtonDisabled={
+                  observationDetails["dodSau"]["dodsarsak"] === ""
+                }
+                finishButtonOnClick={() =>
+                  confirmObservationSave(
+                    "Ønsker du å fullføre observasjonen? Du kan fremdeles registrere fargen på sauen og eiermerket."
+                  )
+                }
+              ></BottomNavigationButtons>
+            </div>
+          </SwiperSlide>
 
           {/* DØD SAU -> FARGE PÅ SAU */}
-          <SwiperSlide>13</SwiperSlide>
+          <SwiperSlide>
+            <div style={{ height: "100%", width: "100%" }}>
+              <div style={{ marginTop: "21.7%", marginBottom: "-25%" }}>
+                <ObservationButtonGroup
+                  observationButtonList={[
+                    {
+                      textContent: "Hvit/Grå",
+                      buttonId: allSheepColorTypes.hvitOrGra,
+                    },
+                    {
+                      textContent: "Brun",
+                      buttonId: allSheepColorTypes.brun,
+                    },
+                    {
+                      textContent: "Sort",
+                      buttonId: allSheepColorTypes.sort,
+                    },
+                    {
+                      textContent: "Ikke spesifisert",
+                      buttonId: allSheepColorTypes.ikkeSpesifisert,
+                    },
+                  ]}
+                  onActiveChange={(buttonId) =>
+                    setObservationField(["dodSau", "fargePaSau"], buttonId)
+                  }
+                  activeButton={observationDetails["dodSau"]["fargePaSau"]}
+                ></ObservationButtonGroup>
+              </div>
 
-          {/* DØD SAU -> FARGE PÅ EIERMERK */}
-          <SwiperSlide>14</SwiperSlide>
+              <BottomNavigationButtons
+                prevButtonLabel="Tilbake"
+                prevButtonOnClick={() => goToPreviousSlide()}
+                prevButtonIcon={arrowBackOutline}
+                nextButtonLabel="Eiermerke"
+                nextButtonOnClick={() => goToNextSlide()}
+                nextButtonIcon={arrowForwardOutline}
+                finishButtonLabel="Fullfør observasjon"
+                finishButtonIcon={checkmarkOutline}
+                finishButtonOnClick={() =>
+                  confirmObservationSave(
+                    "Ønsker du å fullføre observasjonen? Du kan fremdeles registrere fargen på sauens eiermerke."
+                  )
+                }
+              ></BottomNavigationButtons>
+            </div>
+          </SwiperSlide>
+
+          {/* DØD SAU -> FARGE PÅ EIERMERKE */}
+          <SwiperSlide>
+            <div style={{ height: "100%", width: "100%" }}>
+              <ObservationButtonGroup
+                observationButtonList={[
+                  {
+                    textContent: "Rød",
+                    buttonId: allOwnerColorTypes.rod,
+                  },
+                  {
+                    textContent: "Blå",
+                    buttonId: allOwnerColorTypes.bla,
+                  },
+                  {
+                    textContent: "Gul",
+                    buttonId: allOwnerColorTypes.gul,
+                  },
+                  {
+                    textContent: "Grønn",
+                    buttonId: allOwnerColorTypes.gronn,
+                  },
+                  {
+                    textContent: "Ikke spesifisert",
+                    buttonId: allOwnerColorTypes.ikkeSpesifisert,
+                  },
+                ]}
+                onActiveChange={(buttonId) =>
+                  setObservationField(["dodSau", "fargePaEiermerke"], buttonId)
+                }
+                activeButton={observationDetails["dodSau"]["fargePaEiermerke"]}
+              ></ObservationButtonGroup>
+
+              <BottomNavigationButtons
+                prevButtonLabel="Tilbake"
+                prevButtonOnClick={() => goToPreviousSlide()}
+                prevButtonIcon={arrowBackOutline}
+                nextButtonLabel="Fullfør"
+                nextButtonOnClick={() => goToNextSlide()}
+                nextButtonIcon={checkmarkOutline}
+              ></BottomNavigationButtons>
+            </div>
+          </SwiperSlide>
         </Swiper>
       </IonContent>
     </IonModal>

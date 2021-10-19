@@ -26,18 +26,39 @@ interface LeafletMapProps {
   latestLocation: locationType | undefined;
   crosshairLocation: pathCoordinateType | undefined;
   setCrosshairLocation: (location: pathCoordinateType) => void;
+  pathCoordinates: pathCoordinateType[];
 }
 
 const LeafletMap: React.FC<LeafletMapProps> = ({
   latestLocation,
   crosshairLocation,
   setCrosshairLocation,
+  pathCoordinates,
 }) => {
   const [map, setMap] = useState<Map | undefined>();
   const [userPositionMarker, setUserPositionMarker] = useState<Marker<any>>();
   const [crosshairMarker, setCrosshairMarker] = useState<Marker<any>>();
   const [lineFromUserToCrosshair, setLineFromUserToCrosshair] =
     useState<Polyline<any>>();
+  const [pathPolyline, setPathPolyline] = useState<Polyline<any>>();
+
+  // Draws the path that the user has walked
+  useEffect(() => {
+    if (pathCoordinates && pathCoordinates.length >= 2) {
+      let polylinePoints = pathCoordinates.map((coordinate) =>
+        L.latLng(coordinate.latitude, coordinate.longitude)
+      );
+
+      if (pathPolyline) {
+        pathPolyline.setLatLngs(polylinePoints);
+      } else if (map) {
+        let newPolyline = L.polyline(polylinePoints, { weight: 6 });
+        setPathPolyline(newPolyline);
+
+        newPolyline.addTo(map);
+      }
+    }
+  }, [pathCoordinates]);
 
   // Creates marker for user position, and pans to user's position
   useEffect(() => {
@@ -71,10 +92,10 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
         // Pans to user's location
         map.setView(
           new L.LatLng(
-            latestLocation.latitude + 0.01,
+            latestLocation.latitude + 0.0025,
             latestLocation.longitude
           ),
-          13
+          15
         );
       } else {
         // @ts-ignore
@@ -136,7 +157,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
       // Pans to user's location
       map.setView(
         new L.LatLng(latestLocation.latitude, latestLocation.longitude),
-        13
+        15
       );
     }
   }, [map]);
@@ -168,7 +189,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
     <MapContainer
       style={{ width: "100%", height: "100%" }}
       center={[63.446827, 10.421906]}
-      zoom={13}
+      zoom={15}
       scrollWheelZoom={false}
       whenCreated={(newMap) => {
         newMap.invalidateSize();
