@@ -188,60 +188,72 @@ const NumberButtonsSimple: React.FC<NumberButtonsSimpleProps> = ({
           pullingText="<br/>"
         ></IonRefresherContent>
       </IonRefresher>
+
       <div
         style={{
-          ...buttonContainerStyle,
-          paddingBottom: numberButtonList.length === 3 ? "3vw" : "6vw",
+          display: "flex",
+          flexDirection: "column",
+          marginBottom: "-10px",
         }}
       >
-        {numberButtonList.map((buttonProps: numberButtonAdvancedType) => {
-          return (
-            <div
-              className="ion-activatable"
-              style={{
-                ...buttonStyle,
-                background:
-                  activeButton === buttonProps.buttonId ? "yellow" : "white",
-                width: 85 / numberButtonList.length + "vw",
-                height: 85 / numberButtonList.length + "vw",
-              }}
-              onClick={() => setActiveButton(buttonProps.buttonId)}
-            >
+        <div
+          style={{
+            ...buttonContainerStyle,
+            paddingBottom: numberButtonList.length === 3 ? "3vw" : "6vw",
+          }}
+        >
+          {numberButtonList.map((buttonProps: numberButtonAdvancedType) => {
+            return (
               <div
+                className="ion-activatable"
                 style={{
-                  width: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  marginTop: "5%",
+                  ...buttonStyle,
+                  background:
+                    activeButton === buttonProps.buttonId ? "yellow" : "white",
+                  width: 85 / numberButtonList.length + "vw",
+                  height: 85 / numberButtonList.length + "vw",
                 }}
+                onClick={() => setActiveButton(buttonProps.buttonId)}
               >
                 <div
                   style={{
-                    fontSize: numberButtonList.length === 3 ? "18px" : "15px",
-                    fontWeight: "bold",
+                    width: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    marginTop: "5%",
                   }}
                 >
-                  {buttonProps.textLabel}
-                </div>
+                  <div
+                    style={{
+                      fontSize: numberButtonList.length === 3 ? "18px" : "15px",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {buttonProps.textLabel}
+                  </div>
 
-                <div style={lineStyle} />
-                <div
-                  style={{
-                    fontSize: "16px",
-                    marginTop: "3px",
-                  }}
-                >
-                  Søyer: <b>{buttonProps.currentValueFirst}</b>
-                  <br />
-                  Lam: <b>{buttonProps.currentValueSecond}</b>
-                  <br />
-                  Sau: <b>{buttonProps.currentValueThird}</b>
+                  <div style={lineStyle} />
+                  <div
+                    style={{
+                      fontSize: "16px",
+                      marginTop: "3px",
+                    }}
+                  >
+                    Søyer: <b>{buttonProps.currentValueFirst}</b>
+                    <br />
+                    Lam: <b>{buttonProps.currentValueSecond}</b>
+                    <br />
+                    Sau: <b>{buttonProps.currentValueThird}</b>
+                  </div>
                 </div>
+                <IonRippleEffect></IonRippleEffect>
               </div>
-              <IonRippleEffect></IonRippleEffect>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
+        <div style={{ fontSize: "14px", marginTop: "-5px", color: "grey" }}>
+          Trykk eller sveip ned for å bytte farge
+        </div>
       </div>
       <div style={{ width: "100%", height: "70%" }}>
         <CounterButtonAdvanced
