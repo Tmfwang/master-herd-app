@@ -44,5 +44,10 @@ export default function useLongAndShortPress(
     onTouchEnd: () => {
       setStartLongPress(false);
     },
+
+    onTouchMove: () => {
+      setStartShortPress(false);
+      setStartLongPress(false);
+    },
   };
 }

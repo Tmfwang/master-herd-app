@@ -7,8 +7,8 @@ import { MapContainer } from "react-leaflet";
 import "leaflet.offline";
 import "leaflet-rotatedmarker";
 import "leaflet/dist/leaflet.css";
-import userPositionIconImg from "../../../assets/GPSArrowIcon.png";
-import crosshairIconImg from "../../../assets/CrosshairIcon.png";
+import userPositionIconImg from "../../../assets/icons/GPSArrowIcon.png";
+import crosshairIconImg from "../../../assets/icons/CrosshairIcon.png";
 
 let userPositionIcon = L.icon({
   iconUrl: userPositionIconImg,

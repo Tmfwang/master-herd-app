@@ -11,6 +11,96 @@ import {
   IonicSwiper,
   useIonAlert,
 } from "@ionic/react";
+
+import useSound from "use-sound";
+
+// @ts-ignore
+import blaSfx from "../../../assets/sounds/colors/Bla.mp3";
+// @ts-ignore
+import brunSfx from "../../../assets/sounds/colors/Brun.mp3";
+// @ts-ignore
+import gronnSfx from "../../../assets/sounds/colors/Gronn.mp3";
+// @ts-ignore
+import gulEllerBlankSfx from "../../../assets/sounds/colors/GulEllerBlank.mp3";
+// @ts-ignore
+import hvitEllerGraSfx from "../../../assets/sounds/colors/HvitEllerGra.mp3";
+// @ts-ignore
+import rodSfx from "../../../assets/sounds/colors/Rod.mp3";
+// @ts-ignore
+import sortSfx from "../../../assets/sounds/colors/Sort.mp3";
+
+// @ts-ignore
+import zeroSfx from "../../../assets/sounds/numbers/0.mp3";
+// @ts-ignore
+import oneSfx from "../../../assets/sounds/numbers/1.mp3";
+// @ts-ignore
+import twoSfx from "../../../assets/sounds/numbers/2.mp3";
+// @ts-ignore
+import threeSfx from "../../../assets/sounds/numbers/3.mp3";
+// @ts-ignore
+import fourSfx from "../../../assets/sounds/numbers/4.mp3";
+// @ts-ignore
+import fiveSfx from "../../../assets/sounds/numbers/5.mp3";
+// @ts-ignore
+import sixSfx from "../../../assets/sounds/numbers/6.mp3";
+// @ts-ignore
+import sevenSfx from "../../../assets/sounds/numbers/7.mp3";
+// @ts-ignore
+import eightSfx from "../../../assets/sounds/numbers/8.mp3";
+// @ts-ignore
+import nineSfx from "../../../assets/sounds/numbers/9.mp3";
+// @ts-ignore
+import tenSfx from "../../../assets/sounds/numbers/10.mp3";
+// @ts-ignore
+import elevenSfx from "../../../assets/sounds/numbers/11.mp3";
+// @ts-ignore
+import twelveSfx from "../../../assets/sounds/numbers/12.mp3";
+// @ts-ignore
+import thirteenSfx from "../../../assets/sounds/numbers/13.mp3";
+// @ts-ignore
+import fourteenSfx from "../../../assets/sounds/numbers/14.mp3";
+// @ts-ignore
+import fifteenSfx from "../../../assets/sounds/numbers/15.mp3";
+// @ts-ignore
+import sixteenSfx from "../../../assets/sounds/numbers/16.mp3";
+// @ts-ignore
+import seventeenSfx from "../../../assets/sounds/numbers/17.mp3";
+// @ts-ignore
+import eighteenSfx from "../../../assets/sounds/numbers/18.mp3";
+// @ts-ignore
+import nineteenSfx from "../../../assets/sounds/numbers/19.mp3";
+// @ts-ignore
+import twentySfx from "../../../assets/sounds/numbers/20.mp3";
+// @ts-ignore
+import twentyOneSfx from "../../../assets/sounds/numbers/21.mp3";
+// @ts-ignore
+import twentyTwoSfx from "../../../assets/sounds/numbers/22.mp3";
+// @ts-ignore
+import twentyThreeSfx from "../../../assets/sounds/numbers/23.mp3";
+// @ts-ignore
+import twentyFourSfx from "../../../assets/sounds/numbers/24.mp3";
+// @ts-ignore
+import twentyFiveSfx from "../../../assets/sounds/numbers/25.mp3";
+// @ts-ignore
+import twentySixSfx from "../../../assets/sounds/numbers/26.mp3";
+// @ts-ignore
+import twentySevenSfx from "../../../assets/sounds/numbers/27.mp3";
+// @ts-ignore
+import twentyEightSfx from "../../../assets/sounds/numbers/28.mp3";
+// @ts-ignore
+import twentyNineSfx from "../../../assets/sounds/numbers/29.mp3";
+// @ts-ignore
+import thirtySfx from "../../../assets/sounds/numbers/30.mp3";
+// @ts-ignore
+import overThirtySfx from "../../../assets/sounds/numbers/Over30.mp3";
+
+// @ts-ignore
+import soyeSfx from "../../../assets/sounds/numbers/Soye.mp3";
+// @ts-ignore
+import lamSfx from "../../../assets/sounds/numbers/Lam.mp3";
+// @ts-ignore
+import sauSfx from "../../../assets/sounds/numbers/Sau.mp3";
+
 import {
   arrowForwardOutline,
   arrowBackOutline,
@@ -18,8 +108,10 @@ import {
 } from "ionicons/icons";
 
 import ObservationButtonGroup from "./ObservationButtonGroup";
+import ObservationButtonGroupMultiselect from "./ObservationButtonGroupMultiselect";
 import BottomNavigationButtons from "./BottomNavigationButtons";
-import NumberButtons from "./NumberButtons";
+import NumberButtonsSimple from "./NumberButtonsSimple";
+import NumberButtonsAdvanced from "./NumberButtonsAdvanced";
 
 import { observationDetailsType } from "../../../types";
 
@@ -34,8 +126,6 @@ SwiperCore.use([IonicSwiper, EffectFade]);
 
 const allObservationTypes = {
   gruppeSau: "gruppeSau",
-  soye: "soye",
-  lam: "lam",
   rovdyr: "rovdyr",
   skadetSau: "skadetSau",
   dodSau: "dodSau",
@@ -53,6 +143,7 @@ const allOwnerColorTypes = {
   bla: "bla",
   gul: "gul",
   gronn: "gronn",
+  sort: "sort",
   ikkeSpesifisert: "ikkeSpesifisert",
 };
 
@@ -91,25 +182,19 @@ const allSheepCausesOfDeathTypes = {
 const allModalSlidesId = {
   typeObservasjon: 0,
   gruppeSauFargePaSau: 1,
-  gruppeSauFargePaEiermerke: 2,
-  soyeFargePaSau: 3,
-  soyeFargePaBjelleslips: 4,
-  soyeFargePaEiermerke: 5,
-  lamFargePaSau: 6,
-  lamFargePaEiermerke: 7,
-  rovdyrType: 8,
-  skadetSauTypeSkade: 9,
-  skadetSauFargePaSau: 10,
-  skadetSauFargePaEiermerke: 11,
-  dodSauDodsarsak: 12,
-  dodSauFargePaSau: 13,
-  dodSauFargePaEiermerke: 14,
+  gruppeSauFargePaBjelleslips: 2,
+  gruppeSauFargePaEiermerke: 3,
+  rovdyrType: 4,
+  skadetSauTypeSkade: 5,
+  skadetSauFargePaSau: 6,
+  skadetSauFargePaEiermerke: 7,
+  dodSauDodsarsak: 8,
+  dodSauFargePaSau: 9,
+  dodSauFargePaEiermerke: 10,
 };
 
 const allFinalModalSlidesId = [
   allModalSlidesId["gruppeSauFargePaEiermerke"],
-  allModalSlidesId["soyeFargePaEiermerke"],
-  allModalSlidesId["lamFargePaEiermerke"],
   allModalSlidesId["rovdyrType"],
   allModalSlidesId["skadetSauFargePaEiermerke"],
   allModalSlidesId["dodSauFargePaEiermerke"],
@@ -117,12 +202,9 @@ const allFinalModalSlidesId = [
 
 const allModalSlidesHeaders = [
   "Type observasjon",
+
   "Farge på sauene",
-  "Farge på eiermerkene",
-  "Farge på søyene",
   "Farge på bjelleslipsene",
-  "Farge på eiermerkene",
-  "Farge på lammene",
   "Farge på eiermerkene",
   "Type rovdyr",
   "Type skade",
@@ -140,38 +222,15 @@ const defaultObservationDetails: observationDetailsType = {
 
   gruppeSau: {
     fargePaSau: { hvitOrGra: 0, brun: 0, sort: 0 },
-    fargePaEiermerke: {
-      rod: 0,
-      bla: 0,
-      gul: 0,
-      gronn: 0,
-    },
-  },
-
-  soye: {
-    fargePaSau: { hvitOrGra: 0, brun: 0, sort: 0 },
+    fargePaSoye: { hvitOrGra: 0, brun: 0, sort: 0 },
+    fargePaLam: { hvitOrGra: 0, brun: 0, sort: 0 },
     fargePaBjelleslips: {
       rod: 0,
       bla: 0,
       gulOrIngen: 0,
       gronn: 0,
     },
-    fargePaEiermerke: {
-      rod: 0,
-      bla: 0,
-      gul: 0,
-      gronn: 0,
-    },
-  },
-
-  lam: {
-    fargePaSau: { hvitOrGra: 0, brun: 0, sort: 0 },
-    fargePaEiermerke: {
-      rod: 0,
-      bla: 0,
-      gul: 0,
-      gronn: 0,
-    },
+    fargePaEiermerke: [],
   },
 
   rovdyr: {
@@ -202,6 +261,86 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
   setModalOpen,
   saveObservation,
 }) => {
+  const [playZeroSfx, playZeroSfxData] = useSound(zeroSfx);
+  const [playOneSfx, playOneSfxData] = useSound(oneSfx);
+  const [playTwoSfx, playTwoSfxData] = useSound(twoSfx);
+  const [playThreeSfx, playThreeSfxData] = useSound(threeSfx);
+  const [playFourSfx, playFourSfxData] = useSound(fourSfx);
+  const [playFiveSfx, playFiveSfxData] = useSound(fiveSfx);
+  const [playSixSfx, playSixSfxData] = useSound(sixSfx);
+  const [playSevenSfx, playSevenSfxData] = useSound(sevenSfx);
+  const [playEightSfx, playEightSfxData] = useSound(eightSfx);
+  const [playNineSfx, playNineSfxData] = useSound(nineSfx);
+  const [playTenSfx, playTenSfxData] = useSound(tenSfx);
+  const [playElevenSfx, playElevenSfxData] = useSound(elevenSfx);
+  const [playTwelveSfx, playTwelveSfxData] = useSound(twelveSfx);
+  const [playThirteenSfx, playThirteenSfxData] = useSound(thirteenSfx);
+  const [playFourteenSfx, playFourteenSfxData] = useSound(fourteenSfx);
+  const [playFifteenSfx, playFifteenSfxData] = useSound(fifteenSfx);
+  const [playSixteenSfx, playSixteenSfxData] = useSound(sixteenSfx);
+  const [playSeventeenSfx, playSeventeenSfxData] = useSound(seventeenSfx);
+  const [playEighteenSfx, playEighteenSfxData] = useSound(eighteenSfx);
+  const [playNineteenSfx, playNineteenSfxData] = useSound(nineteenSfx);
+  const [playTwentySfx, playTwentySfxData] = useSound(twentySfx);
+  const [playTwentyOneSfx, playTwentyOneSfxData] = useSound(twentyOneSfx);
+  const [playTwentyTwoSfx, playTwentyTwoSfxData] = useSound(twentyTwoSfx);
+  const [playTwentyThreeSfx, playTwentyThreeSfxData] = useSound(twentyThreeSfx);
+  const [playTwentyFourSfx, playTwentyFourSfxData] = useSound(twentyFourSfx);
+  const [playTwentyFiveSfx, playTwentyFiveSfxData] = useSound(twentyFiveSfx);
+  const [playTwentySixSfx, playTwentySixSfxData] = useSound(twentySixSfx);
+  const [playTwentySevenSfx, playTwentySevenSfxData] = useSound(twentySevenSfx);
+  const [playTwentyEightSfx, playTwentyEightSfxData] = useSound(twentyEightSfx);
+  const [playTwentyNineSfx, playTwentyNineSfxData] = useSound(twentyNineSfx);
+  const [playThirtySfx, playThirtySfxData] = useSound(thirtySfx);
+  const [playOverThirtySfx, playOverThirtySfxData] = useSound(overThirtySfx);
+
+  const numberSfx = [
+    { play: playZeroSfx, duration: playZeroSfxData.duration },
+    { play: playOneSfx, duration: playOneSfxData.duration },
+    { play: playTwoSfx, duration: playTwoSfxData.duration },
+    { play: playThreeSfx, duration: playThreeSfxData.duration },
+    { play: playFourSfx, duration: playFourSfxData.duration },
+    { play: playFiveSfx, duration: playFiveSfxData.duration },
+    { play: playSixSfx, duration: playSixSfxData.duration },
+    { play: playSevenSfx, duration: playSevenSfxData.duration },
+    { play: playEightSfx, duration: playEightSfxData.duration },
+    { play: playNineSfx, duration: playNineSfxData.duration },
+    { play: playTenSfx, duration: playTenSfxData.duration },
+    { play: playElevenSfx, duration: playElevenSfxData.duration },
+    { play: playTwelveSfx, duration: playTwelveSfxData.duration },
+    { play: playThirteenSfx, duration: playThirteenSfxData.duration },
+    { play: playFourteenSfx, duration: playFourteenSfxData.duration },
+    { play: playFifteenSfx, duration: playFifteenSfxData.duration },
+    { play: playSixteenSfx, duration: playSixteenSfxData.duration },
+    { play: playSeventeenSfx, duration: playSeventeenSfxData.duration },
+    { play: playEighteenSfx, duration: playEighteenSfxData.duration },
+    { play: playNineteenSfx, duration: playNineteenSfxData.duration },
+    { play: playTwentySfx, duration: playTwentySfxData.duration },
+    { play: playTwentyOneSfx, duration: playTwentyOneSfxData.duration },
+    { play: playTwentyTwoSfx, duration: playTwentyTwoSfxData.duration },
+    { play: playTwentyThreeSfx, duration: playTwentyThreeSfxData.duration },
+    { play: playTwentyFourSfx, duration: playTwentyFourSfxData.duration },
+    { play: playTwentyFiveSfx, duration: playTwentyFiveSfxData.duration },
+    { play: playTwentySixSfx, duration: playTwentySixSfxData.duration },
+    { play: playTwentySevenSfx, duration: playTwentySevenSfxData.duration },
+    { play: playTwentyEightSfx, duration: playTwentyEightSfxData.duration },
+    { play: playTwentyNineSfx, duration: playTwentyNineSfxData.duration },
+    { play: playThirtySfx, duration: playThirtySfxData.duration },
+    { play: playOverThirtySfx, duration: playOverThirtySfxData.duration },
+  ];
+
+  const [playSoyeSfx] = useSound(soyeSfx);
+  const [playLamSfx] = useSound(lamSfx);
+  const [playSauSfx] = useSound(sauSfx);
+
+  const [playBlaSfx] = useSound(blaSfx);
+  const [playBrunSfx] = useSound(brunSfx);
+  const [playGronnSfx] = useSound(gronnSfx);
+  const [playGulEllerBlankSfx] = useSound(gulEllerBlankSfx);
+  const [playHvitEllerGraSfx] = useSound(hvitEllerGraSfx);
+  const [playRodSfx] = useSound(rodSfx);
+  const [playSortSfx] = useSound(sortSfx);
+
   const [presentAlert] = useIonAlert();
 
   const [observationDetails, setObservationDetails] =
@@ -225,12 +364,23 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
       observationDetails["gruppeSau"]["fargePaSau"]["hvitOrGra"] +
       observationDetails["gruppeSau"]["fargePaSau"]["brun"] +
       observationDetails["gruppeSau"]["fargePaSau"]["sort"] +
-      observationDetails["soye"]["fargePaSau"]["hvitOrGra"] +
-      observationDetails["soye"]["fargePaSau"]["brun"] +
-      observationDetails["soye"]["fargePaSau"]["sort"] +
-      observationDetails["lam"]["fargePaSau"]["hvitOrGra"] +
-      observationDetails["lam"]["fargePaSau"]["brun"] +
-      observationDetails["lam"]["fargePaSau"]["sort"]
+      observationDetails["gruppeSau"]["fargePaLam"]["hvitOrGra"] +
+      observationDetails["gruppeSau"]["fargePaLam"]["brun"] +
+      observationDetails["gruppeSau"]["fargePaLam"]["sort"] +
+      observationDetails["gruppeSau"]["fargePaSoye"]["hvitOrGra"] +
+      observationDetails["gruppeSau"]["fargePaSoye"]["brun"] +
+      observationDetails["gruppeSau"]["fargePaSoye"]["sort"]
+    );
+  };
+
+  const calculateTotalSheepExcludingLambs = () => {
+    return (
+      observationDetails["gruppeSau"]["fargePaSau"]["hvitOrGra"] +
+      observationDetails["gruppeSau"]["fargePaSau"]["brun"] +
+      observationDetails["gruppeSau"]["fargePaSau"]["sort"] +
+      observationDetails["gruppeSau"]["fargePaSoye"]["hvitOrGra"] +
+      observationDetails["gruppeSau"]["fargePaSoye"]["brun"] +
+      observationDetails["gruppeSau"]["fargePaSoye"]["sort"]
     );
   };
 
@@ -254,7 +404,7 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
   // ["gruppeSau", "fargePaSau", "brun"]
   const setObservationField = (
     observationField: string[],
-    newValue: string | number
+    newValue: string | string[] | number
   ) => {
     if (observationField.length > 0) {
       const newObservationDetails = JSON.parse(
@@ -295,14 +445,6 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
         switch (observationDetails["alle"]["typeObservasjon"]) {
           case allObservationTypes.gruppeSau:
             activeSlide = allModalSlidesId["gruppeSauFargePaSau"];
-            break;
-
-          case allObservationTypes.soye:
-            activeSlide = allModalSlidesId["soyeFargePaSau"];
-            break;
-
-          case allObservationTypes.lam:
-            activeSlide = allModalSlidesId["lamFargePaSau"];
             break;
 
           case allObservationTypes.rovdyr:
@@ -377,6 +519,14 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
     });
   };
 
+  const isSlideActive = (slideIndex: number) => {
+    if (!swiperInstance) {
+      return false;
+    }
+
+    return slideIndex === swiperInstance.activeIndex;
+  };
+
   return (
     <IonModal
       isOpen={modalOpen}
@@ -413,39 +563,33 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
           {/* TYPE OBSERVASJON */}
           <SwiperSlide>
             <div style={{ height: "100%", width: "100%" }}>
-              <ObservationButtonGroup
-                observationButtonList={[
-                  {
-                    textContent: "Gruppe sau",
-                    buttonId: allObservationTypes.gruppeSau,
-                  },
-                  {
-                    textContent: "Søye",
-                    buttonId: allObservationTypes.soye,
-                  },
-                  {
-                    textContent: "Lam",
-                    buttonId: allObservationTypes.lam,
-                  },
-                  {
-                    textContent: "Rovdyr",
-                    buttonId: allObservationTypes.rovdyr,
-                  },
-                  {
-                    textContent: "Skadet sau",
-                    buttonId: allObservationTypes.skadetSau,
-                  },
-                  {
-                    textContent: "Død sau",
-                    buttonId: allObservationTypes.dodSau,
-                  },
-                ]}
-                onActiveChange={(buttonId) =>
-                  setObservationField(["alle", "typeObservasjon"], buttonId)
-                }
-                activeButton={observationDetails["alle"]["typeObservasjon"]}
-              ></ObservationButtonGroup>
+              <div style={{ marginTop: "21.7%", marginBottom: "-25%" }}>
+                <ObservationButtonGroup
+                  observationButtonList={[
+                    {
+                      textContent: "Gruppe sau",
+                      buttonId: allObservationTypes.gruppeSau,
+                    },
 
+                    {
+                      textContent: "Rovdyr",
+                      buttonId: allObservationTypes.rovdyr,
+                    },
+                    {
+                      textContent: "Skadet sau",
+                      buttonId: allObservationTypes.skadetSau,
+                    },
+                    {
+                      textContent: "Død sau",
+                      buttonId: allObservationTypes.dodSau,
+                    },
+                  ]}
+                  onActiveChange={(buttonId) =>
+                    setObservationField(["alle", "typeObservasjon"], buttonId)
+                  }
+                  activeButton={observationDetails["alle"]["typeObservasjon"]}
+                ></ObservationButtonGroup>
+              </div>
               <BottomNavigationButtons
                 prevButtonLabel="Avbryt"
                 prevButtonOnClick={() => setModalOpen(false)}
@@ -459,160 +603,72 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
           {/* GRUPPE SAU -> FARGE PÅ SAU */}
           <SwiperSlide>
             <div style={{ height: "100%", width: "100%" }}>
-              <NumberButtons
+              <NumberButtonsAdvanced
                 numberButtonList={[
                   {
                     textLabel: "Hvit/Grå",
+                    playSound: playHvitEllerGraSfx,
                     buttonId: allSheepColorTypes.hvitOrGra,
-                    currentValue:
+                    currentValueFirst:
+                      observationDetails["gruppeSau"]["fargePaSoye"][
+                        "hvitOrGra"
+                      ],
+                    currentValueSecond:
+                      observationDetails["gruppeSau"]["fargePaLam"][
+                        "hvitOrGra"
+                      ],
+                    currentValueThird:
                       observationDetails["gruppeSau"]["fargePaSau"][
                         "hvitOrGra"
                       ],
                   },
                   {
                     textLabel: "Brun",
+                    playSound: playBrunSfx,
                     buttonId: allSheepColorTypes.brun,
-                    currentValue:
+                    currentValueFirst:
+                      observationDetails["gruppeSau"]["fargePaSoye"]["brun"],
+                    currentValueSecond:
+                      observationDetails["gruppeSau"]["fargePaLam"]["brun"],
+                    currentValueThird:
                       observationDetails["gruppeSau"]["fargePaSau"]["brun"],
                   },
                   {
                     textLabel: "Sort",
+                    playSound: playSortSfx,
                     buttonId: allSheepColorTypes.sort,
-                    currentValue:
+                    currentValueFirst:
+                      observationDetails["gruppeSau"]["fargePaSoye"]["sort"],
+                    currentValueSecond:
+                      observationDetails["gruppeSau"]["fargePaLam"]["sort"],
+                    currentValueThird:
                       observationDetails["gruppeSau"]["fargePaSau"]["sort"],
                   },
                 ]}
-                onValueChange={(buttonId: string, newValue: number) => {
+                onValueChange={(
+                  typeOfSheepId: string,
+                  buttonId: string,
+                  newValue: number
+                ) => {
                   setObservationField(
-                    ["gruppeSau", "fargePaSau", buttonId],
+                    ["gruppeSau", typeOfSheepId, buttonId],
                     newValue
                   );
                 }}
-                counterTopText="Trykk for å legge til en sau med denne fargen"
-                counterBottomText="Hold inne i minst 1 sekund for å fjerne en sau med denne fargen"
-              ></NumberButtons>
-              <BottomNavigationButtons
-                prevButtonLabel="Tilbake"
-                prevButtonOnClick={() => {
-                  goToPreviousSlide();
-                }}
-                prevButtonIcon={arrowBackOutline}
-                nextButtonLabel="Eiermerke"
-                nextButtonOnClick={() => goToNextSlide()}
-                nextButtonIcon={arrowForwardOutline}
-                nextButtonDisabled={calculateTotalSheep() === 0}
-                finishButtonLabel="Fullfør observasjon"
-                finishButtonIcon={checkmarkOutline}
-                finishButtonDisabled={calculateTotalSheep() === 0}
-                finishButtonOnClick={() =>
-                  confirmObservationSave(
-                    "Ønsker du å fullføre observasjonen? Du kan fremdeles registrere fargene på sauenes eiermerker."
-                  )
-                }
-              ></BottomNavigationButtons>
-            </div>
-          </SwiperSlide>
-
-          {/* GRUPPE SAU -> FARGE PÅ EIERMERKE */}
-          <SwiperSlide>
-            <div style={{ height: "100%", width: "100%" }}>
-              <NumberButtons
-                numberButtonList={[
-                  {
-                    textLabel: "Rød",
-                    buttonId: allOwnerColorTypes.rod,
-                    currentValue:
-                      observationDetails["gruppeSau"]["fargePaEiermerke"][
-                        "rod"
-                      ],
-                  },
-                  {
-                    textLabel: "Blå",
-                    buttonId: allOwnerColorTypes.bla,
-                    currentValue:
-                      observationDetails["gruppeSau"]["fargePaEiermerke"][
-                        "bla"
-                      ],
-                  },
-                  {
-                    textLabel: "Gul",
-                    buttonId: allOwnerColorTypes.gul,
-                    currentValue:
-                      observationDetails["gruppeSau"]["fargePaEiermerke"][
-                        "gul"
-                      ],
-                  },
-                  {
-                    textLabel: "Grønn",
-                    buttonId: allOwnerColorTypes.gronn,
-                    currentValue:
-                      observationDetails["gruppeSau"]["fargePaEiermerke"][
-                        "gronn"
-                      ],
-                  },
-                ]}
-                onValueChange={(buttonId: string, newValue: number) => {
-                  setObservationField(
-                    ["gruppeSau", "fargePaEiermerke", buttonId],
-                    newValue
-                  );
-                }}
-                maxTotalAmount={calculateTotalSheep()}
-                maxTotalAmountErrorMessage={
-                  "Du registrerte " +
-                  calculateTotalSheep() +
-                  " sau, og kan derfor ikke ha flere eiermerker enn dette."
-                }
-                counterTopText="Trykk for å legge til et eiermerke med denne fargen"
-                counterBottomText="Hold inne i minst 1 sekund for å fjerne et eiermerke med denne fargen"
-              ></NumberButtons>
-              <BottomNavigationButtons
-                prevButtonLabel="Tilbake"
-                prevButtonOnClick={() => {
-                  goToPreviousSlide();
-                }}
-                prevButtonIcon={arrowBackOutline}
-                nextButtonLabel="Fullfør"
-                nextButtonOnClick={() => goToNextSlide()}
-                nextButtonIcon={checkmarkOutline}
-                nextButtonDisabled={calculateTotalSheep() === 0}
-              ></BottomNavigationButtons>
-            </div>
-          </SwiperSlide>
-
-          {/* SØYE -> FARGE PÅ SAU */}
-          <SwiperSlide>
-            <div style={{ height: "100%", width: "100%" }}>
-              <NumberButtons
-                numberButtonList={[
-                  {
-                    textLabel: "Hvit/Grå",
-                    buttonId: allSheepColorTypes.hvitOrGra,
-                    currentValue:
-                      observationDetails["soye"]["fargePaSau"]["hvitOrGra"],
-                  },
-                  {
-                    textLabel: "Brun",
-                    buttonId: allSheepColorTypes.brun,
-                    currentValue:
-                      observationDetails["soye"]["fargePaSau"]["brun"],
-                  },
-                  {
-                    textLabel: "Sort",
-                    buttonId: allSheepColorTypes.sort,
-                    currentValue:
-                      observationDetails["soye"]["fargePaSau"]["sort"],
-                  },
-                ]}
-                onValueChange={(buttonId: string, newValue: number) => {
-                  setObservationField(
-                    ["soye", "fargePaSau", buttonId],
-                    newValue
-                  );
-                }}
-                counterTopText="Trykk for å legge til en søye med denne fargen"
-                counterBottomText="Hold inne i minst 1 sekund for å fjerne en søye med denne fargen"
-              ></NumberButtons>
+                numberSfx={numberSfx}
+                firstCounterTopText="Trykk for å legge til en søye med denne fargen"
+                firstCounterBottomText="Hold inne for å fjerne en søye med denne fargen"
+                firstCounterTypeSfx={playSoyeSfx}
+                secondCounterTopText="Trykk for å legge til et lam med denne fargen"
+                secondCounterBottomText="Hold inne for å fjerne et lam med denne fargen"
+                secondCounterTypeSfx={playLamSfx}
+                thirdCounterTopText="Trykk for å legge til en generell sau (søyer/lam) med denne fargen"
+                thirdCounterBottomText="Hold inne for å fjerne en sau med denne fargen"
+                thirdCounterTypeSfx={playSauSfx}
+                isSlideActive={isSlideActive(
+                  allModalSlidesId["gruppeSauFargePaSau"]
+                )}
+              ></NumberButtonsAdvanced>
               <BottomNavigationButtons
                 prevButtonLabel="Tilbake"
                 prevButtonOnClick={() => {
@@ -628,61 +684,74 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
                 finishButtonDisabled={calculateTotalSheep() === 0}
                 finishButtonOnClick={() =>
                   confirmObservationSave(
-                    "Ønsker du å fullføre observasjonen? Du kan fremdeles registrere fargene på søyenes bjelleslips og eiermerker."
+                    "Ønsker du å fullføre observasjonen? Du kan fremdeles registrere fargene på sauenes bjelleslips og eiermerker."
                   )
                 }
               ></BottomNavigationButtons>
             </div>
           </SwiperSlide>
 
-          {/* SØYE -> FARGE PÅ BJELLESLIPS */}
+          {/* GRUPPE SAU -> FARGE PÅ BJELLESLIPS */}
           <SwiperSlide>
             <div style={{ height: "100%", width: "100%" }}>
-              <NumberButtons
+              <NumberButtonsSimple
                 numberButtonList={[
                   {
                     textLabel: "Rød",
+                    playSound: playRodSfx,
                     buttonId: allTieColorTypes.rod,
                     currentValue:
-                      observationDetails["soye"]["fargePaBjelleslips"]["rod"],
+                      observationDetails["gruppeSau"]["fargePaBjelleslips"][
+                        "rod"
+                      ],
                   },
                   {
                     textLabel: "Blå",
+                    playSound: playBlaSfx,
                     buttonId: allTieColorTypes.bla,
                     currentValue:
-                      observationDetails["soye"]["fargePaBjelleslips"]["bla"],
+                      observationDetails["gruppeSau"]["fargePaBjelleslips"][
+                        "bla"
+                      ],
                   },
                   {
                     textLabel: "Gul/Blank",
+                    playSound: playGulEllerBlankSfx,
                     buttonId: allTieColorTypes.gulOrIngen,
                     currentValue:
-                      observationDetails["soye"]["fargePaBjelleslips"][
+                      observationDetails["gruppeSau"]["fargePaBjelleslips"][
                         "gulOrIngen"
                       ],
                   },
                   {
                     textLabel: "Grønn",
+                    playSound: playGronnSfx,
                     buttonId: allTieColorTypes.gronn,
                     currentValue:
-                      observationDetails["soye"]["fargePaBjelleslips"]["gronn"],
+                      observationDetails["gruppeSau"]["fargePaBjelleslips"][
+                        "gronn"
+                      ],
                   },
                 ]}
                 onValueChange={(buttonId: string, newValue: number) => {
                   setObservationField(
-                    ["soye", "fargePaBjelleslips", buttonId],
+                    ["gruppeSau", "fargePaBjelleslips", buttonId],
                     newValue
                   );
                 }}
-                maxTotalAmount={calculateTotalSheep()}
+                numberSfx={numberSfx}
+                maxTotalAmount={calculateTotalSheepExcludingLambs()}
                 maxTotalAmountErrorMessage={
                   "Du registrerte " +
-                  calculateTotalSheep() +
-                  (calculateTotalSheep() === 1 ? " søye" : " søyer") +
-                  ", og kan derfor ikke ha flere bjelleslips enn dette."
+                  calculateTotalSheepExcludingLambs() +
+                  " sau (lam ekskludert), og kan derfor ikke ha flere bjelleslips enn dette."
                 }
                 counterTopText="Trykk for å legge til et bjelleslips med denne fargen"
                 counterBottomText="Hold inne i minst 1 sekund for å fjerne et bjelleslips med denne fargen"
-              ></NumberButtons>
+                isSlideActive={isSlideActive(
+                  allModalSlidesId["gruppeSauFargePaBjelleslips"]
+                )}
+              ></NumberButtonsSimple>
               <BottomNavigationButtons
                 prevButtonLabel="Tilbake"
                 prevButtonOnClick={() => {
@@ -692,188 +761,61 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
                 nextButtonLabel="Eiermerke"
                 nextButtonOnClick={() => goToNextSlide()}
                 nextButtonIcon={arrowForwardOutline}
-                nextButtonDisabled={calculateTotalSheep() === 0}
                 finishButtonLabel="Fullfør observasjon"
                 finishButtonIcon={checkmarkOutline}
                 finishButtonOnClick={() =>
                   confirmObservationSave(
-                    "Ønsker du å fullføre observasjonen? Du kan fremdeles registrere fargene på søyenes eiermerker."
+                    "Ønsker du å fullføre observasjonen? Du kan fremdeles registrere fargene på sauenes eiermerker."
                   )
                 }
               ></BottomNavigationButtons>
             </div>
           </SwiperSlide>
 
-          {/* SØYE -> FARGE PÅ EIERMERKE */}
+          {/* GRUPPE SAU -> FARGE PÅ EIERMERKE */}
           <SwiperSlide>
             <div style={{ height: "100%", width: "100%" }}>
-              <NumberButtons
-                numberButtonList={[
+              <ObservationButtonGroupMultiselect
+                observationButtonList={[
                   {
-                    textLabel: "Rød",
+                    textContent: "Rød",
                     buttonId: allOwnerColorTypes.rod,
-                    currentValue:
-                      observationDetails["soye"]["fargePaEiermerke"]["rod"],
                   },
                   {
-                    textLabel: "Blå",
+                    textContent: "Blå",
                     buttonId: allOwnerColorTypes.bla,
-                    currentValue:
-                      observationDetails["soye"]["fargePaEiermerke"]["bla"],
                   },
                   {
-                    textLabel: "Gul",
+                    textContent: "Gul",
                     buttonId: allOwnerColorTypes.gul,
-                    currentValue:
-                      observationDetails["soye"]["fargePaEiermerke"]["gul"],
                   },
                   {
-                    textLabel: "Grønn",
+                    textContent: "Grønn",
                     buttonId: allOwnerColorTypes.gronn,
-                    currentValue:
-                      observationDetails["soye"]["fargePaEiermerke"]["gronn"],
+                  },
+                  {
+                    textContent: "Sort",
+                    buttonId: allOwnerColorTypes.sort,
                   },
                 ]}
-                onValueChange={(buttonId: string, newValue: number) => {
+                onActiveChange={(newActiveButtons) =>
                   setObservationField(
-                    ["soye", "fargePaEiermerke", buttonId],
-                    newValue
-                  );
-                }}
-                maxTotalAmount={calculateTotalSheep()}
-                maxTotalAmountErrorMessage={
-                  "Du registrerte " +
-                  calculateTotalSheep() +
-                  (calculateTotalSheep() === 1 ? " søye" : " søyer") +
-                  ", og kan derfor ikke ha flere eiermerker enn dette."
-                }
-                counterTopText="Trykk for å legge til et eiermerke med denne fargen"
-                counterBottomText="Hold inne i minst 1 sekund for å fjerne et eiermerke med denne fargen"
-              ></NumberButtons>
-              <BottomNavigationButtons
-                prevButtonLabel="Tilbake"
-                prevButtonOnClick={() => {
-                  goToPreviousSlide();
-                }}
-                prevButtonIcon={arrowBackOutline}
-                nextButtonLabel="Fullfør"
-                nextButtonOnClick={() => goToNextSlide()}
-                nextButtonIcon={checkmarkOutline}
-                nextButtonDisabled={calculateTotalSheep() === 0}
-              ></BottomNavigationButtons>
-            </div>
-          </SwiperSlide>
-
-          {/* LAM -> FARGE PÅ SAU */}
-          <SwiperSlide>
-            <div style={{ height: "100%", width: "100%" }}>
-              <NumberButtons
-                numberButtonList={[
-                  {
-                    textLabel: "Hvit/Grå",
-                    buttonId: allSheepColorTypes.hvitOrGra,
-                    currentValue:
-                      observationDetails["lam"]["fargePaSau"]["hvitOrGra"],
-                  },
-                  {
-                    textLabel: "Brun",
-                    buttonId: allSheepColorTypes.brun,
-                    currentValue:
-                      observationDetails["lam"]["fargePaSau"]["brun"],
-                  },
-                  {
-                    textLabel: "Sort",
-                    buttonId: allSheepColorTypes.sort,
-                    currentValue:
-                      observationDetails["lam"]["fargePaSau"]["sort"],
-                  },
-                ]}
-                onValueChange={(buttonId: string, newValue: number) => {
-                  setObservationField(
-                    ["lam", "fargePaSau", buttonId],
-                    newValue
-                  );
-                }}
-                counterTopText="Trykk for å legge til et lam med denne fargen"
-                counterBottomText="Hold inne i minst 1 sekund for å fjerne et lam med denne fargen"
-              ></NumberButtons>
-              <BottomNavigationButtons
-                prevButtonLabel="Tilbake"
-                prevButtonOnClick={() => {
-                  goToPreviousSlide();
-                }}
-                prevButtonIcon={arrowBackOutline}
-                nextButtonLabel="Eiermerke"
-                nextButtonOnClick={() => goToNextSlide()}
-                nextButtonIcon={arrowForwardOutline}
-                nextButtonDisabled={calculateTotalSheep() === 0}
-                finishButtonLabel="Fullfør observasjon"
-                finishButtonIcon={checkmarkOutline}
-                finishButtonDisabled={calculateTotalSheep() === 0}
-                finishButtonOnClick={() =>
-                  confirmObservationSave(
-                    "Ønsker du å fullføre observasjonen? Du kan fremdeles registrere fargene på lammenes eiermerker."
+                    ["gruppeSau", "fargePaEiermerke"],
+                    newActiveButtons
                   )
                 }
-              ></BottomNavigationButtons>
-            </div>
-          </SwiperSlide>
-
-          {/* LAM -> FARGE PÅ EIERMERKE */}
-          <SwiperSlide>
-            <div style={{ height: "100%", width: "100%" }}>
-              <NumberButtons
-                numberButtonList={[
-                  {
-                    textLabel: "Rød",
-                    buttonId: allOwnerColorTypes.rod,
-                    currentValue:
-                      observationDetails["lam"]["fargePaEiermerke"]["rod"],
-                  },
-                  {
-                    textLabel: "Blå",
-                    buttonId: allOwnerColorTypes.bla,
-                    currentValue:
-                      observationDetails["lam"]["fargePaEiermerke"]["bla"],
-                  },
-                  {
-                    textLabel: "Gul",
-                    buttonId: allOwnerColorTypes.gul,
-                    currentValue:
-                      observationDetails["lam"]["fargePaEiermerke"]["gul"],
-                  },
-                  {
-                    textLabel: "Grønn",
-                    buttonId: allOwnerColorTypes.gronn,
-                    currentValue:
-                      observationDetails["lam"]["fargePaEiermerke"]["gronn"],
-                  },
-                ]}
-                onValueChange={(buttonId: string, newValue: number) => {
-                  setObservationField(
-                    ["lam", "fargePaEiermerke", buttonId],
-                    newValue
-                  );
-                }}
-                maxTotalAmount={calculateTotalSheep()}
-                maxTotalAmountErrorMessage={
-                  "Du registrerte " +
-                  calculateTotalSheep() +
-                  " lam, og kan derfor ikke ha flere eiermerker enn dette."
+                activeButtons={
+                  observationDetails["gruppeSau"]["fargePaEiermerke"]
                 }
-                counterTopText="Trykk for å legge til et eiermerke med denne fargen"
-                counterBottomText="Hold inne i minst 1 sekund for å fjerne et eiermerke med denne fargen"
-              ></NumberButtons>
+              ></ObservationButtonGroupMultiselect>
+
               <BottomNavigationButtons
                 prevButtonLabel="Tilbake"
-                prevButtonOnClick={() => {
-                  goToPreviousSlide();
-                }}
+                prevButtonOnClick={() => goToPreviousSlide()}
                 prevButtonIcon={arrowBackOutline}
                 nextButtonLabel="Fullfør"
                 nextButtonOnClick={() => goToNextSlide()}
                 nextButtonIcon={checkmarkOutline}
-                nextButtonDisabled={calculateTotalSheep() === 0}
               ></BottomNavigationButtons>
             </div>
           </SwiperSlide>
@@ -1054,6 +996,10 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
                     buttonId: allOwnerColorTypes.gronn,
                   },
                   {
+                    textContent: "Sort",
+                    buttonId: allOwnerColorTypes.sort,
+                  },
+                  {
                     textContent: "Ikke spesifisert",
                     buttonId: allOwnerColorTypes.ikkeSpesifisert,
                   },
@@ -1204,6 +1150,10 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
                   {
                     textContent: "Grønn",
                     buttonId: allOwnerColorTypes.gronn,
+                  },
+                  {
+                    textContent: "Sort",
+                    buttonId: allOwnerColorTypes.sort,
                   },
                   {
                     textContent: "Ikke spesifisert",

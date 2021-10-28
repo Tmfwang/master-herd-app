@@ -3,7 +3,7 @@ import "leaflet/dist/leaflet.css";
 import { locationType } from "../../../types";
 import { MapContainer } from "react-leaflet";
 import L, { Map, Marker } from "leaflet";
-import userPositionIconImg from "../../../assets/GPSArrowIcon.png";
+import userPositionIconImg from "../../../assets/icons/GPSArrowIcon.png";
 import "leaflet.offline";
 import "leaflet-rotatedmarker";
 

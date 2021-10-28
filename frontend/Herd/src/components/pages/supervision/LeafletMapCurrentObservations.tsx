@@ -6,19 +6,19 @@ import {
   fullObservationType,
 } from "../../../types";
 
-import L, { Map, Marker, Polyline } from "leaflet";
+import L, { Map, Polyline } from "leaflet";
 import { MapContainer } from "react-leaflet";
 import "leaflet.offline";
 import "leaflet-rotatedmarker";
 import "leaflet/dist/leaflet.css";
 
-import binocularIconImg from "../../../assets/BinocularIcon.png";
-import gruppeSauIconImg from "../../../assets/GruppeSauIcon.png";
-import soyeIconImg from "../../../assets/SoyeIcon.png";
-import lamIconImg from "../../../assets/LamIcon.png";
-import rovdyrIconImg from "../../../assets/RovdyrIcon.png";
-import skadetSauIconImg from "../../../assets/SkadetSauIcon.png";
-import dodSauIconImg from "../../../assets/DodSauIcon.png";
+import binocularIconImg from "../../../assets/icons/BinocularIcon.png";
+import gruppeSauIconImg from "../../../assets/icons/GruppeSauIcon.png";
+import soyeIconImg from "../../../assets/icons/SoyeIcon.png";
+import lamIconImg from "../../../assets/icons/LamIcon.png";
+import rovdyrIconImg from "../../../assets/icons/RovdyrIcon.png";
+import skadetSauIconImg from "../../../assets/icons/SkadetSauIcon.png";
+import dodSauIconImg from "../../../assets/icons/DodSauIcon.png";
 
 let binocularIcon = L.icon({
   iconUrl: binocularIconImg,
