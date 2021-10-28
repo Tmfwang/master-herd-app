@@ -11,29 +11,39 @@ import {
   useIonAlert,
   useIonToast,
   IonRippleEffect,
+  IonRefresher,
+  IonRefresherContent,
 } from "@ionic/react";
+
+import { RefresherEventDetail } from "@ionic/core";
+
+import { chevronDownCircleOutline } from "ionicons/icons";
 
 import { Haptics, ImpactStyle, NotificationType } from "@capacitor/haptics";
 
-import CounterButton from "./CounterButton";
+import CounterButtonSimple from "./CounterButtonSimple";
 
 import { numberButtonType } from "../../../types";
 
-interface NumberButtonsProps {
+interface NumberButtonsSimpleProps {
   numberButtonList: numberButtonType[];
   onValueChange: (buttonId: string, newValue: number) => void;
+  numberSfx: { play: () => void; duration: number | null }[];
   counterTopText: string;
   counterBottomText: string;
+  isSlideActive?: boolean;
   initialActiveButton?: string;
   maxTotalAmount?: number;
   maxTotalAmountErrorMessage?: string;
 }
 
-const NumberButtons: React.FC<NumberButtonsProps> = ({
+const NumberButtonsSimple: React.FC<NumberButtonsSimpleProps> = ({
   numberButtonList,
   onValueChange,
+  numberSfx,
   counterTopText,
   counterBottomText,
+  isSlideActive = false,
   initialActiveButton = numberButtonList[0].buttonId,
   maxTotalAmount,
   maxTotalAmountErrorMessage = "Du kan ikke ha et totalt antall større enn " +
@@ -41,6 +51,24 @@ const NumberButtons: React.FC<NumberButtonsProps> = ({
 }) => {
   const [activeButton, setActiveButton] = useState<string>(initialActiveButton);
   const [presentToast] = useIonToast();
+
+  const setNextButtonActive = (event: CustomEvent<RefresherEventDetail>) => {
+    event.detail.complete();
+    for (let i = 0; i < numberButtonList.length; i++) {
+      let button = numberButtonList[i];
+      if (button.buttonId === activeButton) {
+        const nextButton = numberButtonList[(i + 1) % numberButtonList.length];
+
+        setActiveButton(nextButton.buttonId);
+
+        if (nextButton.playSound) {
+          nextButton.playSound();
+        }
+
+        break;
+      }
+    }
+  };
 
   const onIncrement = () => {
     for (let button of numberButtonList) {
@@ -51,6 +79,8 @@ const NumberButtons: React.FC<NumberButtonsProps> = ({
         ) {
           onValueChange(activeButton, button.currentValue + 1);
           hapticsImpactIncrement();
+
+          numberSfx[Math.min(31, button.currentValue + 1)].play();
         } else {
           presentToast({
             header: "Maks antall nådd",
@@ -67,6 +97,8 @@ const NumberButtons: React.FC<NumberButtonsProps> = ({
       if (button.buttonId === activeButton && button.currentValue > 0) {
         onValueChange(activeButton, button.currentValue - 1);
         hapticsImpactDecrement();
+
+        numberSfx[Math.min(31, button.currentValue - 1)].play();
       }
     }
   };
@@ -91,6 +123,19 @@ const NumberButtons: React.FC<NumberButtonsProps> = ({
 
   return (
     <div style={{ height: "79%", width: "100%" }}>
+      <IonRefresher
+        slot="fixed"
+        onIonRefresh={setNextButtonActive}
+        closeDuration="1ms"
+        snapbackDuration="1ms"
+        disabled={!isSlideActive}
+        pullFactor={0.5}
+      >
+        <IonRefresherContent
+          pullingIcon={chevronDownCircleOutline}
+          pullingText="<br/>"
+        ></IonRefresherContent>
+      </IonRefresher>
       <div
         style={{
           ...buttonContainerStyle,
@@ -143,12 +188,12 @@ const NumberButtons: React.FC<NumberButtonsProps> = ({
         })}
       </div>
       <div style={{ width: "100%", height: "70%" }}>
-        <CounterButton
+        <CounterButtonSimple
           onIncrement={onIncrement}
           onDecrement={onDecrement}
           topText={counterTopText}
           bottomText={counterBottomText}
-        ></CounterButton>
+        ></CounterButtonSimple>
       </div>
     </div>
   );
@@ -181,4 +226,4 @@ const lineStyle = {
   marginBottom: "5px",
 };
 
-export default NumberButtons;
+export default NumberButtonsSimple;

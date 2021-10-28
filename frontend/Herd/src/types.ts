@@ -39,7 +39,26 @@ export type numberButtonType = {
   // An ID identifying the button that is active
   buttonId: string;
 
+  // A function that can be used to play a sound when the button becomes active
+  playSound?: () => void;
+
   currentValue: number;
+};
+
+export type numberButtonAdvancedType = {
+  // The textual label of the button
+  textLabel: string;
+
+  // An ID identifying the button that is active
+  buttonId: string;
+
+  // A function that can be used to play a sound when the button becomes active
+  playSound?: () => void;
+
+  // Current values
+  currentValueFirst: number;
+  currentValueSecond: number;
+  currentValueThird: number;
 };
 
 export type observationDetailsType = {
@@ -49,38 +68,16 @@ export type observationDetailsType = {
 
   gruppeSau: {
     fargePaSau: { hvitOrGra: number; brun: number; sort: number };
-    fargePaEiermerke: {
-      rod: number;
-      bla: number;
-      gul: number;
-      gronn: number;
-    };
-  };
+    fargePaSoye: { hvitOrGra: number; brun: number; sort: number };
+    fargePaLam: { hvitOrGra: number; brun: number; sort: number };
 
-  soye: {
-    fargePaSau: { hvitOrGra: number; brun: number; sort: number };
     fargePaBjelleslips: {
       rod: number;
       bla: number;
       gulOrIngen: number;
       gronn: number;
     };
-    fargePaEiermerke: {
-      rod: number;
-      bla: number;
-      gul: number;
-      gronn: number;
-    };
-  };
-
-  lam: {
-    fargePaSau: { hvitOrGra: number; brun: number; sort: number };
-    fargePaEiermerke: {
-      rod: number;
-      bla: number;
-      gul: number;
-      gronn: number;
-    };
+    fargePaEiermerke: string[];
   };
 
   rovdyr: {
@@ -119,5 +116,3 @@ export type supervisionType = {
   whenStarted: string;
   whenEnded: string;
 };
-
-

@@ -12,7 +12,7 @@ import { MapContainer } from "react-leaflet";
 import "leaflet.offline";
 import "leaflet-rotatedmarker";
 import "leaflet/dist/leaflet.css";
-import userPositionIconImg from "../../../assets/GPSArrowIcon.png";
+import userPositionIconImg from "../../../assets/icons/GPSArrowIcon.png";
 
 // @ts-ignore
 import { getTileUrls } from "leaflet.offline";
