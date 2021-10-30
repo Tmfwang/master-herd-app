@@ -85,10 +85,10 @@ const MainHamburgerMenu: React.FC<MainHamburgerMenuProps> = () => {
       <IonContent>
         <IonList>
           <IonItem href="/home">Gå til forsiden</IonItem>
-          <IonItem href="/login">Logg inn</IonItem>
-          <IonItem href="/register">Registrer bruker</IonItem>
+          <IonItem href="/">Logg inn</IonItem>
+          <IonItem href="/">Registrer bruker</IonItem>
           <IonItem href="/new-supervision">Start ny tilsynstur</IonItem>
-          <IonItem href="/past-supervisions">Se tidligere tilsynsturer</IonItem>
+          <IonItem href="/">Se tidligere tilsynsturer</IonItem>
           <IonItem href="/download-maps">Last ned kart</IonItem>
           <IonItem button onClick={handleDeleteMapsClicked}>
             Slett nedlastede kart

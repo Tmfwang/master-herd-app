@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+import { locationType } from "../../../types";
+
 import {
   IonContent,
   IonHeader,
@@ -27,6 +29,8 @@ interface CurrentObservationsModalProps {
   setModalOpen: (isOpen: boolean) => void;
   allObservations: fullObservationType[];
   pathCoordinates: pathCoordinateType[];
+  latestLocation: locationType | undefined;
+  removeObservation: (observationIndex: number) => void;
 }
 
 const CurrentObservationsModal: React.FC<CurrentObservationsModalProps> = ({
@@ -34,8 +38,9 @@ const CurrentObservationsModal: React.FC<CurrentObservationsModalProps> = ({
   setModalOpen,
   allObservations,
   pathCoordinates,
+  latestLocation,
+  removeObservation,
 }) => {
-  const [presentAlert] = useIonAlert();
 
   return (
     <IonModal isOpen={modalOpen}>
@@ -57,6 +62,9 @@ const CurrentObservationsModal: React.FC<CurrentObservationsModalProps> = ({
         <LeafletMap
           allObservations={allObservations}
           pathCoordinates={pathCoordinates}
+          latestLocation={latestLocation}
+          modalOpen={modalOpen}
+          removeObservation={removeObservation}
         />
       </IonContent>
     </IonModal>
