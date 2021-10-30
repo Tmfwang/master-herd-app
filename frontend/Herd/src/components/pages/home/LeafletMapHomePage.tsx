@@ -83,6 +83,15 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ latestLocation }) => {
         }
       );
       tileLayerOffline.addTo(map);
+
+      map.on("move", function (e) {
+        if (map) {
+          const mapSize = map.getSize();
+          if (!mapSize["x"] || !mapSize["y"]) {
+            map.invalidateSize();
+          }
+        }
+      });
     }
 
     if (

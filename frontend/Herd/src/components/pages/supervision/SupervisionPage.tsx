@@ -109,6 +109,15 @@ const SupervisionPage: React.FC<SupervisionPageProps> = () => {
     }
   }, [latestPathLocation]);
 
+  const removeObservation = (observationIndex: number) => {
+    if (observationIndex < allObservations.length) {
+      let newAllObservations = [...allObservations];
+      newAllObservations.splice(observationIndex, 1);
+
+      setAllObservations(newAllObservations);
+    }
+  };
+
   const saveObservation = (observationDetails: observationDetailsType) => {
     let newObservation: fullObservationType = {
       observationDetails: observationDetails,
@@ -258,13 +267,15 @@ const SupervisionPage: React.FC<SupervisionPageProps> = () => {
             modalOpen={newObservationModalOpen}
             setModalOpen={setNewObservationModalOpen}
             saveObservation={saveObservation}
-          ></SupervisionModal>
+            ></SupervisionModal>
 
           <CurrentObservationsModal
             modalOpen={currentObservationsModalOpen}
             setModalOpen={setCurrentObservationsModalOpen}
             allObservations={allObservations}
             pathCoordinates={pathCoordinates}
+            latestLocation={latestBearingLocation}
+            removeObservation={removeObservation}
           ></CurrentObservationsModal>
         </IonContent>
       </IonPage>

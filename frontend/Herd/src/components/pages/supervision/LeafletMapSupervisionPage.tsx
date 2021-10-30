@@ -137,12 +137,20 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
         newCrosshairMarker.addTo(map);
 
         map.on("move", function (e) {
+          if (map) {
+            const mapSize = map.getSize();
+            if (!mapSize["x"] || !mapSize["y"]) {
+              map.invalidateSize();
+            }
+          }
           newCrosshairMarker.setLatLng(map.getCenter());
           setCrosshairLocation({
             latitude: map.getCenter().lat,
             longitude: map.getCenter().lng,
           });
         });
+
+        
 
         setCrosshairMarker(newCrosshairMarker);
       }
