@@ -7,9 +7,13 @@ import {
   IonMenu,
   IonList,
   IonItem,
+  IonIcon,
+  IonLabel,
   useIonAlert,
   useIonToast,
 } from "@ionic/react";
+
+import { checkmarkOutline, closeOutline, locateOutline } from "ionicons/icons";
 
 import { menuController } from "@ionic/core";
 
@@ -27,11 +31,10 @@ const SupervisionHamburgerMenu: React.FC<SupervisionHamburgerMenuProps> = ({
   const [presentAlert] = useIonAlert();
   const [presentToast] = useIonToast();
 
-
   const handleCurrentObservations = () => {
-    menuController.toggle()
-    seeCurrentObservations()
-  }
+    menuController.toggle();
+    seeCurrentObservations();
+  };
 
   return (
     <IonMenu
@@ -48,13 +51,16 @@ const SupervisionHamburgerMenu: React.FC<SupervisionHamburgerMenuProps> = ({
       <IonContent>
         <IonList>
           <IonItem button onClick={finishSupervision}>
-            Fullfør tilsynstur
+            <IonIcon slot="start" icon={checkmarkOutline}></IonIcon>
+            <IonLabel>Fullfør tilsynstur</IonLabel>
           </IonItem>
           <IonItem button onClick={cancelSupervision}>
-            Avbryt tilsynstur
+            <IonIcon slot="start" icon={closeOutline}></IonIcon>
+            <IonLabel>Avbryt tilsynstur</IonLabel>
           </IonItem>
           <IonItem button onClick={handleCurrentObservations}>
-            Tilsynsturens observasjoner
+            <IonIcon slot="start" icon={locateOutline}></IonIcon>
+            <IonLabel>Turens observasjoner</IonLabel>
           </IonItem>
         </IonList>
       </IonContent>

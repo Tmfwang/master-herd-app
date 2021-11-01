@@ -27,8 +27,13 @@ import { numberButtonType } from "../../../types";
 
 interface NumberButtonsSimpleProps {
   numberButtonList: numberButtonType[];
+  numberButtonsSfxActivated: boolean;
+
   onValueChange: (buttonId: string, newValue: number) => void;
+
   numberSfx: { play: () => void; duration: number | null }[];
+  numberSfxActivated: boolean;
+
   counterTopText: string;
   counterBottomText: string;
   isSlideActive?: boolean;
@@ -39,8 +44,10 @@ interface NumberButtonsSimpleProps {
 
 const NumberButtonsSimple: React.FC<NumberButtonsSimpleProps> = ({
   numberButtonList,
+  numberButtonsSfxActivated,
   onValueChange,
   numberSfx,
+  numberSfxActivated,
   counterTopText,
   counterBottomText,
   isSlideActive = false,
@@ -61,7 +68,7 @@ const NumberButtonsSimple: React.FC<NumberButtonsSimpleProps> = ({
 
         setActiveButton(nextButton.buttonId);
 
-        if (nextButton.playSound) {
+        if (nextButton.playSound && numberButtonsSfxActivated) {
           nextButton.playSound();
         }
 
@@ -80,7 +87,9 @@ const NumberButtonsSimple: React.FC<NumberButtonsSimpleProps> = ({
           onValueChange(activeButton, button.currentValue + 1);
           hapticsImpactIncrement();
 
-          numberSfx[Math.min(31, button.currentValue + 1)].play();
+          if (numberSfxActivated) {
+            numberSfx[Math.min(31, button.currentValue + 1)].play();
+          }
         } else {
           presentToast({
             header: "Maks antall nådd",
@@ -98,7 +107,9 @@ const NumberButtonsSimple: React.FC<NumberButtonsSimpleProps> = ({
         onValueChange(activeButton, button.currentValue - 1);
         hapticsImpactDecrement();
 
-        numberSfx[Math.min(31, button.currentValue - 1)].play();
+        if (numberSfxActivated) {
+          numberSfx[Math.min(31, button.currentValue - 1)].play();
+        }
       }
     }
   };

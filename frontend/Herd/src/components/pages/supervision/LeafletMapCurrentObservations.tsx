@@ -26,12 +26,19 @@ import "leaflet.offline";
 import "leaflet-rotatedmarker";
 import "leaflet/dist/leaflet.css";
 
+// @ts-ignore
 import binocularIconImg from "../../../assets/icons/BinocularIcon.png";
+// @ts-ignore
 import gruppeSauIconImg from "../../../assets/icons/GruppeSauIcon.png";
+// @ts-ignore
 import soyeIconImg from "../../../assets/icons/SoyeIcon.png";
+// @ts-ignore
 import lamIconImg from "../../../assets/icons/LamIcon.png";
+// @ts-ignore
 import rovdyrIconImg from "../../../assets/icons/RovdyrIcon.png";
+// @ts-ignore
 import skadetSauIconImg from "../../../assets/icons/SkadetSauIcon.png";
+// @ts-ignore
 import dodSauIconImg from "../../../assets/icons/DodSauIcon.png";
 
 const allObservationTypes = {
@@ -73,13 +80,6 @@ const allSheepCausesOfDeathTypes = {
   fallulykke: "fallulykke",
   drukningsulykke: "drukningsulykke",
   annet: "annet",
-};
-
-const allTieColorTypes = {
-  rod: "rod",
-  bla: "bla",
-  gulOrIngen: "gulOrIngen",
-  gronn: "gronn",
 };
 
 const allSheepColorTypes = {
@@ -651,18 +651,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
               justifyContent: "center",
             }}
           >
-            <div style={{ height: "270px", overflowY: "auto" }}>
-              <div
-                style={{
-                  position: "fixed",
-                  width: "200px",
-                  height: "40px",
-                  bottom: "70px",
-                  zIndex: 9999,
-                  background:
-                    "linear-gradient(to bottom,  rgba(255, 255, 255, 0),  rgba(255, 255, 255, 1) 100%)",
-                }}
-              ></div>
+            <div>
               <IonList>
                 <IonItemGroup>
                   <IonItemDivider>
@@ -1187,6 +1176,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
         newMap.invalidateSize();
         setMap(newMap);
       }}
+      zoomControl={false}
     ></MapContainer>
   );
 };

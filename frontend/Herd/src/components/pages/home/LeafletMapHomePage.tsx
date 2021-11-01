@@ -118,6 +118,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ latestLocation }) => {
         newMap.invalidateSize();
         setMap(newMap);
       }}
+      zoomControl={false}
     ></MapContainer>
   );
 };

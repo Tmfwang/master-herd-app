@@ -24,6 +24,8 @@ const typeOfSheepIds = {
 
 interface NumberButtonsSimpleProps {
   numberButtonList: numberButtonAdvancedType[];
+  numberButtonsSfxActivated: boolean;
+
   onValueChange: (
     typeOfSheepId: string,
     buttonId: string,
@@ -31,6 +33,7 @@ interface NumberButtonsSimpleProps {
   ) => void;
 
   numberSfx: { play: () => void; duration: number | null }[];
+  numberSfxActivated: boolean;
 
   firstCounterTopText: string;
   firstCounterBottomText: string;
@@ -50,8 +53,10 @@ interface NumberButtonsSimpleProps {
 
 const NumberButtonsSimple: React.FC<NumberButtonsSimpleProps> = ({
   numberButtonList,
+  numberButtonsSfxActivated,
   onValueChange,
   numberSfx,
+  numberSfxActivated,
   firstCounterTopText,
   firstCounterBottomText,
   firstCounterTypeSfx,
@@ -76,7 +81,7 @@ const NumberButtonsSimple: React.FC<NumberButtonsSimpleProps> = ({
 
         setActiveButton(nextButton.buttonId);
 
-        if (nextButton.playSound) {
+        if (nextButton.playSound && numberButtonsSfxActivated) {
           nextButton.playSound();
         }
 
@@ -113,13 +118,16 @@ const NumberButtonsSimple: React.FC<NumberButtonsSimpleProps> = ({
         onValueChange(typeOfSheepId, activeButton, currentValue + 1);
         hapticsImpactIncrement();
 
-        numberSfx[Math.min(31, currentValue + 1)].play();
+        if (numberSfxActivated) {
+          numberSfx[Math.min(31, currentValue + 1)].play();
 
-        // Plays the sfx of the type of sheep if the type of sheep is different from the previous
-        const sfxDuration = numberSfx[Math.min(31, currentValue + 1)].duration;
-        if (sfxDuration != null && typeOfSheepId !== prevPressedSheepType) {
-          setPrevPressedSheepType(typeOfSheepId);
-          setTimeout(() => typeSfx(), sfxDuration);
+          // Plays the sfx of the type of sheep if the type of sheep is different from the previous
+          const sfxDuration =
+            numberSfx[Math.min(31, currentValue + 1)].duration;
+          if (sfxDuration != null && typeOfSheepId !== prevPressedSheepType) {
+            setPrevPressedSheepType(typeOfSheepId);
+            setTimeout(() => typeSfx(), sfxDuration);
+          }
         }
       }
     }
@@ -150,13 +158,16 @@ const NumberButtonsSimple: React.FC<NumberButtonsSimpleProps> = ({
       }
 
       if (button.buttonId === activeButton && currentValue > 0) {
-        numberSfx[Math.min(31, currentValue - 1)].play();
+        if (numberSfxActivated) {
+          numberSfx[Math.min(31, currentValue - 1)].play();
 
-        // Plays the sfx of the type of sheep if the type of sheep is different from the previous
-        const sfxDuration = numberSfx[Math.min(31, currentValue + 1)].duration;
-        if (sfxDuration != null && typeOfSheepId !== prevPressedSheepType) {
-          setPrevPressedSheepType(typeOfSheepId);
-          setTimeout(() => typeSfx(), sfxDuration);
+          // Plays the sfx of the type of sheep if the type of sheep is different from the previous
+          const sfxDuration =
+            numberSfx[Math.min(31, currentValue + 1)].duration;
+          if (sfxDuration != null && typeOfSheepId !== prevPressedSheepType) {
+            setPrevPressedSheepType(typeOfSheepId);
+            setTimeout(() => typeSfx(), sfxDuration);
+          }
         }
 
         onValueChange(typeOfSheepId, activeButton, currentValue - 1);

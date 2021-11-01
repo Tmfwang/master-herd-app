@@ -3,9 +3,10 @@ import { IonApp, IonRouterOutlet, setupConfig } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 
 import Home from "./components/pages/home/HomePage";
+import Settings from "./components/pages/settings/SettingsPage";
 import MapDownloadPage from "./components/pages/map_download/MapDownloadPage";
 import SupervisionPage from "./components/pages/supervision/SupervisionPage";
-
+import PreviousSupervisionsPage from "./components/pages/previous_supervisions/PreviousSupervisionsPage";
 import "./App.css";
 
 /* Core CSS required for Ionic components to work properly */
@@ -26,6 +27,7 @@ import "@ionic/react/css/display.css";
 
 /* Theme variables */
 import "./theme/variables.css";
+import SettingsPage from "./components/pages/settings/SettingsPage";
 
 setupConfig({
   hardwareBackButton: false,
@@ -44,6 +46,12 @@ const App: React.FC = () => {
           </Route>
           <Route exact path="/new-supervision">
             <SupervisionPage />
+          </Route>
+          <Route exact path="/previous-supervisions">
+            <PreviousSupervisionsPage />
+          </Route>
+          <Route exact path="/settings">
+            <SettingsPage />
           </Route>
 
           <Route exact path="/">
