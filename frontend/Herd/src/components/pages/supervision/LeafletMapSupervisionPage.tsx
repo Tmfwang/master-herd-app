@@ -203,6 +203,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
         newMap.invalidateSize();
         setMap(newMap);
       }}
+      zoomControl={false}
     ></MapContainer>
   );
 };

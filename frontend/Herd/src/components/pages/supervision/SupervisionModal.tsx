@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+import { Storage } from "@capacitor/storage";
+
 import {
   IonContent,
   IonHeader,
@@ -10,6 +12,7 @@ import {
   IonButton,
   IonicSwiper,
   useIonAlert,
+  useIonViewWillEnter,
 } from "@ionic/react";
 
 import useSound from "use-sound";
@@ -341,6 +344,18 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
   const [playRodSfx] = useSound(rodSfx);
   const [playSortSfx] = useSound(sortSfx);
 
+  const [shouldReadNumberOfSheepsToggle, setShouldReadNumberOfSheepsToggle] =
+    useState<boolean>(true);
+
+  const [shouldReadNumberOfTiesToggle, setShouldReadNumberOfTiesToggle] =
+    useState<boolean>(true);
+
+  const [shouldReadColorOfSheepsToggle, setShouldReadColorOfSheepsToggle] =
+    useState<boolean>(true);
+
+  const [shouldReadColorOfTiesToggle, setShouldReadColorOfTiesToggle] =
+    useState<boolean>(true);
+
   const [presentAlert] = useIonAlert();
 
   const [observationDetails, setObservationDetails] =
@@ -358,6 +373,79 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
   );
 
   const [swiperInstance, setSwiperInstance] = useState<any>();
+
+  // Følgende 4 funksjoner henter 4 ulike lokalt-lagrede variabler som bestemmer om taleopplesning skal være aktivt
+  useIonViewWillEnter(async () => {
+    let shouldReadNumberOfSheeps = true;
+    const { value } = await Storage.get({ key: "shouldReadNumberOfSheeps" });
+
+    if (value) {
+      try {
+        shouldReadNumberOfSheeps = JSON.parse(value);
+      } catch (err) {}
+    }
+
+    await Storage.set({
+      key: "shouldReadNumberOfSheeps",
+      value: JSON.stringify(shouldReadNumberOfSheeps),
+    });
+
+    setShouldReadNumberOfSheepsToggle(shouldReadNumberOfSheeps);
+  });
+
+  useIonViewWillEnter(async () => {
+    let shouldReadNumberOfTies = true;
+    const { value } = await Storage.get({ key: "shouldReadNumberOfTies" });
+
+    if (value) {
+      try {
+        shouldReadNumberOfTies = JSON.parse(value);
+      } catch (err) {}
+    }
+
+    await Storage.set({
+      key: "shouldReadNumberOfTies",
+      value: JSON.stringify(shouldReadNumberOfTies),
+    });
+
+    setShouldReadNumberOfTiesToggle(shouldReadNumberOfTies);
+  });
+
+  useIonViewWillEnter(async () => {
+    let shouldReadColorOfSheeps = true;
+    const { value } = await Storage.get({ key: "shouldReadColorOfSheeps" });
+
+    if (value) {
+      try {
+        shouldReadColorOfSheeps = JSON.parse(value);
+      } catch (err) {}
+    }
+
+    await Storage.set({
+      key: "shouldReadColorOfSheeps",
+      value: JSON.stringify(shouldReadColorOfSheeps),
+    });
+
+    setShouldReadColorOfSheepsToggle(shouldReadColorOfSheeps);
+  });
+
+  useIonViewWillEnter(async () => {
+    let shouldReadColorOfTies = true;
+    const { value } = await Storage.get({ key: "shouldReadColorOfTies" });
+
+    if (value) {
+      try {
+        shouldReadColorOfTies = JSON.parse(value);
+      } catch (err) {}
+    }
+
+    await Storage.set({
+      key: "shouldReadColorOfTies",
+      value: JSON.stringify(shouldReadColorOfTies),
+    });
+
+    setShouldReadColorOfTiesToggle(shouldReadColorOfTies);
+  });
 
   const calculateTotalSheep = () => {
     return (
@@ -645,6 +733,7 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
                       observationDetails["gruppeSau"]["fargePaSau"]["sort"],
                   },
                 ]}
+                numberButtonsSfxActivated={shouldReadColorOfSheepsToggle}
                 onValueChange={(
                   typeOfSheepId: string,
                   buttonId: string,
@@ -656,6 +745,7 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
                   );
                 }}
                 numberSfx={numberSfx}
+                numberSfxActivated={shouldReadNumberOfSheepsToggle}
                 firstCounterTopText="Trykk for å legge til en søye med denne fargen"
                 firstCounterBottomText="Hold inne for å fjerne en søye med denne fargen"
                 firstCounterTypeSfx={playSoyeSfx}
@@ -733,6 +823,7 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
                       ],
                   },
                 ]}
+                numberButtonsSfxActivated={shouldReadColorOfTiesToggle}
                 onValueChange={(buttonId: string, newValue: number) => {
                   setObservationField(
                     ["gruppeSau", "fargePaBjelleslips", buttonId],
@@ -740,6 +831,7 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
                   );
                 }}
                 numberSfx={numberSfx}
+                numberSfxActivated={shouldReadNumberOfTiesToggle}
                 maxTotalAmount={calculateTotalSheepExcludingLambs()}
                 maxTotalAmountErrorMessage={
                   "Du registrerte " +

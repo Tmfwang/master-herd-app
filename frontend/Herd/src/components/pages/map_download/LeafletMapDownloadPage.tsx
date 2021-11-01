@@ -257,6 +257,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ latestLocation }) => {
         zoom={13}
         scrollWheelZoom={false}
         whenCreated={setMap}
+        zoomControl={false}
       ></MapContainer>
 
       <IonLoading

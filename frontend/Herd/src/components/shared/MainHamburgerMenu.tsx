@@ -7,9 +7,24 @@ import {
   IonMenu,
   IonList,
   IonItem,
+  IonItemGroup,
+  IonItemDivider,
+  IonLabel,
+  IonIcon,
   useIonAlert,
   useIonToast,
 } from "@ionic/react";
+
+import {
+  locateOutline,
+  calendarOutline,
+  cloudDownloadOutline,
+  trashOutline,
+  homeOutline,
+  settingsOutline,
+  logInOutline,
+  createOutline,
+} from "ionicons/icons";
 
 // @ts-ignore
 import { truncate } from "leaflet.offline";
@@ -84,15 +99,65 @@ const MainHamburgerMenu: React.FC<MainHamburgerMenuProps> = () => {
       </IonHeader>
       <IonContent>
         <IonList>
-          <IonItem href="/home">Gå til forsiden</IonItem>
-          <IonItem href="/">Logg inn</IonItem>
-          <IonItem href="/">Registrer bruker</IonItem>
-          <IonItem href="/new-supervision">Start ny tilsynstur</IonItem>
-          <IonItem href="/">Se tidligere tilsynsturer</IonItem>
-          <IonItem href="/download-maps">Last ned kart</IonItem>
-          <IonItem button onClick={handleDeleteMapsClicked}>
-            Slett nedlastede kart
-          </IonItem>
+          <IonItemGroup>
+            <IonItemDivider>
+              <IonLabel>Diverse</IonLabel>
+            </IonItemDivider>
+
+            <IonItem href="/home">
+              <IonIcon slot="start" icon={homeOutline}></IonIcon>
+              <IonLabel>Gå til forsiden</IonLabel>
+            </IonItem>
+            <IonItem href="/settings">
+              <IonIcon slot="start" icon={settingsOutline}></IonIcon>
+              <IonLabel>Innstillinger</IonLabel>
+            </IonItem>
+          </IonItemGroup>
+
+          <IonItemGroup>
+            <IonItemDivider>
+              <IonLabel>Tilsyn</IonLabel>
+            </IonItemDivider>
+
+            <IonItem href="/new-supervision">
+              <IonIcon slot="start" icon={locateOutline}></IonIcon>
+              <IonLabel>Start ny tilsynstur</IonLabel>
+            </IonItem>
+            <IonItem href="/previous-supervisions">
+              <IonIcon slot="start" icon={calendarOutline}></IonIcon>
+              <IonLabel>Se tidligere tilsynsturer</IonLabel>
+            </IonItem>
+          </IonItemGroup>
+
+          <IonItemGroup>
+            <IonItemDivider>
+              <IonLabel>Kart</IonLabel>
+            </IonItemDivider>
+
+            <IonItem href="/download-maps">
+              <IonIcon slot="start" icon={cloudDownloadOutline}></IonIcon>
+              <IonLabel>Last ned kart</IonLabel>
+            </IonItem>
+            <IonItem button onClick={handleDeleteMapsClicked}>
+              <IonIcon slot="start" icon={trashOutline}></IonIcon>
+              <IonLabel>Slett nedlastede kart</IonLabel>
+            </IonItem>
+          </IonItemGroup>
+
+          <IonItemGroup>
+            <IonItemDivider>
+              <IonLabel>Brukerprofil</IonLabel>
+            </IonItemDivider>
+
+            <IonItem href="/">
+              <IonIcon slot="start" icon={logInOutline}></IonIcon>
+              <IonLabel>Logg inn</IonLabel>
+            </IonItem>
+            <IonItem href="/">
+              <IonIcon slot="start" icon={createOutline}></IonIcon>
+              <IonLabel>Registrer bruker</IonLabel>
+            </IonItem>
+          </IonItemGroup>
         </IonList>
       </IonContent>
     </IonMenu>
