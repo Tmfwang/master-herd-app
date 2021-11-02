@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import {
   IonRippleEffect,
@@ -22,7 +22,7 @@ const typeOfSheepIds = {
   fargePaSau: "fargePaSau",
 };
 
-interface NumberButtonsSimpleProps {
+interface NumberButtonsAdvancedProps {
   numberButtonList: numberButtonAdvancedType[];
   numberButtonsSfxActivated: boolean;
 
@@ -51,7 +51,8 @@ interface NumberButtonsSimpleProps {
   initialActiveButton?: string;
 }
 
-const NumberButtonsSimple: React.FC<NumberButtonsSimpleProps> = ({
+// This is an advanced version of the number buttons. It uses the advanced counter button instead of the simple one.
+const NumberButtonsAdvanced: React.FC<NumberButtonsAdvancedProps> = ({
   numberButtonList,
   numberButtonsSfxActivated,
   onValueChange,
@@ -309,4 +310,4 @@ const lineStyle = {
   marginBottom: "5px",
 };
 
-export default NumberButtonsSimple;
+export default NumberButtonsAdvanced;

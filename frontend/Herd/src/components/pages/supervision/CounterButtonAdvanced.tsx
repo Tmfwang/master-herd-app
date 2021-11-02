@@ -1,21 +1,4 @@
-import { useEffect, useState } from "react";
-
-import { Haptics, ImpactStyle, NotificationType } from "@capacitor/haptics";
-
-import {
-  IonContent,
-  IonHeader,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-  IonButtons,
-  IonMenuButton,
-  useIonAlert,
-  useIonToast,
-  IonRippleEffect,
-  IonButton,
-  IonIcon,
-} from "@ionic/react";
+import { IonRippleEffect } from "@ionic/react";
 
 import useLongAndShortPress from "../../hooks/useLongAndShortPress";
 
@@ -36,6 +19,8 @@ interface CounterButtonProps {
   bottomTextThirdButton: string;
 }
 
+// This is an advanced version of the counter button; it can be seen as a combination of three simple counter buttons.
+// This is used to count sheep, female sheep and lambs.
 const CounterButton: React.FC<CounterButtonProps> = ({
   onIncrement,
   onDecrement,

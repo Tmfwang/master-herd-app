@@ -30,6 +30,7 @@ interface LeafletMapProps {
   latestLocation: locationType | undefined;
 }
 
+// This is the leaflet map component for the map download page; it provides a button for downloading the current map for offline use
 const LeafletMap: React.FC<LeafletMapProps> = ({ latestLocation }) => {
   const [map, setMap] = useState<Map | undefined>();
   const [tileLayer, setTileLayer] = useState<any>();

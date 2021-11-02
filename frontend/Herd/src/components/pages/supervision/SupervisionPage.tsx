@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { Storage } from "@capacitor/storage";
+import { SecureStoragePlugin } from "capacitor-secure-storage-plugin";
 
 import { useHistory } from "react-router-dom";
 
@@ -41,6 +41,7 @@ import "./SupervisionPage.css";
 
 interface SupervisionPageProps {}
 
+// The main component for the supervision page
 const SupervisionPage: React.FC<SupervisionPageProps> = () => {
   let history = useHistory();
 
@@ -162,7 +163,11 @@ const SupervisionPage: React.FC<SupervisionPageProps> = () => {
 
     const saveSupervision = async () => {
       let allSupervisions = [] as supervisionType[];
-      const { value } = await Storage.get({ key: "allSupervisions" });
+
+      let value;
+      await SecureStoragePlugin.get({
+        key: "allSupervisions",
+      }).then((readValue) => (value = readValue.value));
 
       if (value) {
         try {
@@ -177,7 +182,7 @@ const SupervisionPage: React.FC<SupervisionPageProps> = () => {
         whenEnded: new Date().toISOString(),
       });
 
-      await Storage.set({
+      await SecureStoragePlugin.set({
         key: "allSupervisions",
         value: JSON.stringify(allSupervisions),
       });
@@ -267,7 +272,7 @@ const SupervisionPage: React.FC<SupervisionPageProps> = () => {
             modalOpen={newObservationModalOpen}
             setModalOpen={setNewObservationModalOpen}
             saveObservation={saveObservation}
-            ></SupervisionModal>
+          ></SupervisionModal>
 
           <CurrentObservationsModal
             modalOpen={currentObservationsModalOpen}

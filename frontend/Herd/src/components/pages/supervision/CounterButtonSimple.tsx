@@ -1,21 +1,4 @@
-import { useEffect, useState } from "react";
-
-import { Haptics, ImpactStyle, NotificationType } from "@capacitor/haptics";
-
-import {
-  IonContent,
-  IonHeader,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-  IonButtons,
-  IonMenuButton,
-  useIonAlert,
-  useIonToast,
-  IonRippleEffect,
-  IonButton,
-  IonIcon,
-} from "@ionic/react";
+import { IonRippleEffect } from "@ionic/react";
 
 import useLongAndShortPress from "../../hooks/useLongAndShortPress";
 
@@ -26,6 +9,7 @@ interface CounterButtonProps {
   bottomText: string;
 }
 
+// This is a simple button used for counting up and down
 const CounterButton: React.FC<CounterButtonProps> = ({
   onIncrement,
   onDecrement,

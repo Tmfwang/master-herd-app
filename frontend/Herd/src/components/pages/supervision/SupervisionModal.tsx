@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import { Storage } from "@capacitor/storage";
+import { SecureStoragePlugin } from "capacitor-secure-storage-plugin";
 
 import {
   IonContent,
@@ -259,6 +259,7 @@ interface SupervisionModalProps {
   saveObservation: (observationDetails: observationDetailsType) => void;
 }
 
+// This is the supervision modal; it contains all buttons and steps for registering an observation
 const SupervisionModal: React.FC<SupervisionModalProps> = ({
   modalOpen,
   setModalOpen,
@@ -377,7 +378,11 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
   // Følgende 4 funksjoner henter 4 ulike lokalt-lagrede variabler som bestemmer om taleopplesning skal være aktivt
   useIonViewWillEnter(async () => {
     let shouldReadNumberOfSheeps = true;
-    const { value } = await Storage.get({ key: "shouldReadNumberOfSheeps" });
+    let value;
+
+    await SecureStoragePlugin.get({
+      key: "shouldReadNumberOfSheeps",
+    }).then((readValue) => (value = readValue.value));
 
     if (value) {
       try {
@@ -385,7 +390,7 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
       } catch (err) {}
     }
 
-    await Storage.set({
+    await SecureStoragePlugin.set({
       key: "shouldReadNumberOfSheeps",
       value: JSON.stringify(shouldReadNumberOfSheeps),
     });
@@ -395,7 +400,11 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
 
   useIonViewWillEnter(async () => {
     let shouldReadNumberOfTies = true;
-    const { value } = await Storage.get({ key: "shouldReadNumberOfTies" });
+    let value;
+
+    await SecureStoragePlugin.get({
+      key: "shouldReadNumberOfTies",
+    }).then((readValue) => (value = readValue.value));
 
     if (value) {
       try {
@@ -403,7 +412,7 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
       } catch (err) {}
     }
 
-    await Storage.set({
+    await SecureStoragePlugin.set({
       key: "shouldReadNumberOfTies",
       value: JSON.stringify(shouldReadNumberOfTies),
     });
@@ -413,7 +422,11 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
 
   useIonViewWillEnter(async () => {
     let shouldReadColorOfSheeps = true;
-    const { value } = await Storage.get({ key: "shouldReadColorOfSheeps" });
+    let value;
+
+    await SecureStoragePlugin.get({
+      key: "shouldReadColorOfSheeps",
+    }).then((readValue) => (value = readValue.value));
 
     if (value) {
       try {
@@ -421,7 +434,7 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
       } catch (err) {}
     }
 
-    await Storage.set({
+    await SecureStoragePlugin.set({
       key: "shouldReadColorOfSheeps",
       value: JSON.stringify(shouldReadColorOfSheeps),
     });
@@ -431,7 +444,11 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
 
   useIonViewWillEnter(async () => {
     let shouldReadColorOfTies = true;
-    const { value } = await Storage.get({ key: "shouldReadColorOfTies" });
+    let value;
+
+    await SecureStoragePlugin.get({
+      key: "shouldReadColorOfTies",
+    }).then((readValue) => (value = readValue.value));
 
     if (value) {
       try {
@@ -439,7 +456,7 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
       } catch (err) {}
     }
 
-    await Storage.set({
+    await SecureStoragePlugin.set({
       key: "shouldReadColorOfTies",
       value: JSON.stringify(shouldReadColorOfTies),
     });

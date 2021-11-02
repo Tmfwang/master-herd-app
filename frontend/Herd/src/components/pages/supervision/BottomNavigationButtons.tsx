@@ -1,19 +1,4 @@
-import { useEffect, useState } from "react";
-
-import {
-  IonContent,
-  IonHeader,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-  IonButtons,
-  IonMenuButton,
-  useIonAlert,
-  useIonToast,
-  IonRippleEffect,
-  IonButton,
-  IonIcon,
-} from "@ionic/react";
+import { IonButton, IonIcon } from "@ionic/react";
 
 interface BottomNavigationButtonsProps {
   prevButtonLabel?: string;
@@ -30,6 +15,7 @@ interface BottomNavigationButtonsProps {
   finishButtonDisabled?: boolean;
 }
 
+// This is a component containing navigation buttons such as "previous", "next" and "finish"
 const BottomNavigationButtons: React.FC<BottomNavigationButtonsProps> = ({
   prevButtonLabel,
   nextButtonLabel,

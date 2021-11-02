@@ -1,14 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import {
-  IonContent,
-  IonHeader,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-  IonButtons,
-  IonMenuButton,
-  useIonAlert,
   useIonToast,
   IonRippleEffect,
   IonRefresher,
@@ -42,6 +34,8 @@ interface NumberButtonsSimpleProps {
   maxTotalAmountErrorMessage?: string;
 }
 
+// This is a component containing simple number buttons. It includes "category" buttons that represents the
+// different types of stuff that can be counted, and a simple counterbutton for counting up or down.
 const NumberButtonsSimple: React.FC<NumberButtonsSimpleProps> = ({
   numberButtonList,
   numberButtonsSfxActivated,
