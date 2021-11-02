@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import {
   IonContent,
@@ -15,13 +15,14 @@ import MainHamburgerMenu from "../../shared/MainHamburgerMenu";
 import GeolocatorForeground from "../../geolocators/GeolocatorForeground";
 import LeafletMap from "./LeafletMapHomePage";
 
-import { locationType, pathCoordinateType } from "../../../types";
+import { locationType } from "../../../types";
 
 import "leaflet/dist/leaflet.css";
 import "./HomePage.css";
 
 interface HomePageProps {}
 
+// This is the main component for the home page
 const HomePage: React.FC<HomePageProps> = () => {
   const [latestLocation, setLatestLocation] = useState<
     locationType | undefined

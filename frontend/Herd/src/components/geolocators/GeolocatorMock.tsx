@@ -1,10 +1,11 @@
 import { locationType } from "../../types";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 interface GeolocatorMockProps {
   latestLocationUpdateCallback: (location: locationType) => void;
 }
 
+// This Geolocator can be used to mock GPS location when running the app on a PC web browser, as that does not support the normal Geolocation
 const Geolocator: React.FC<GeolocatorMockProps> = ({
   latestLocationUpdateCallback,
 }) => {

@@ -8,6 +8,7 @@ interface BottomCenterButtonProps {
   onClick: () => void;
 }
 
+// A shared component that places a button at the bottom center of the screen
 const BottomCenterButton: React.FC<BottomCenterButtonProps> = ({
   buttonText,
   buttonIcon,

@@ -1,19 +1,4 @@
-import { useEffect, useState } from "react";
-
-import {
-  IonContent,
-  IonHeader,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-  IonButtons,
-  IonMenuButton,
-  useIonAlert,
-  useIonToast,
-  IonRippleEffect,
-  IonItem,
-  IonCheckbox,
-} from "@ionic/react";
+import { IonRippleEffect, IonCheckbox } from "@ionic/react";
 
 import { observationButtonType } from "../../../types";
 
@@ -23,6 +8,7 @@ interface ObservationButtonGroupMultiselectProps {
   activeButtons: string[];
 }
 
+// This component contains a simple set of buttons where multiple can be selected
 const ObservationButtonGroupMultiselect: React.FC<ObservationButtonGroupMultiselectProps> =
   ({ observationButtonList, onActiveChange, activeButtons }) => {
     const handleButtonClick = (buttonId: string) => {
@@ -65,7 +51,7 @@ const ObservationButtonGroupMultiselect: React.FC<ObservationButtonGroupMultisel
                 >
                   {buttonProps.textContent}
 
-                  <div style={{marginTop: "10px"}}>
+                  <div style={{ marginTop: "10px" }}>
                     <IonCheckbox
                       mode="ios"
                       checked={activeButtons.includes(buttonProps.buttonId)}

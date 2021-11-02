@@ -17,6 +17,7 @@ interface LeafletMapProps {
   latestLocation: locationType | undefined;
 }
 
+// This is the leaflet map component for the home page; it simply shows the user's location as a marker on the map
 const LeafletMap: React.FC<LeafletMapProps> = ({ latestLocation }) => {
   const [map, setMap] = useState<Map | undefined>();
   const [userPositionMarker, setUserPositionMarker] = useState<Marker<any>>();

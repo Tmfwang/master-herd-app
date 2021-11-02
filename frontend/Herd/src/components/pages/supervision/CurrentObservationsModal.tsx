@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 import { locationType } from "../../../types";
 
 import {
@@ -10,17 +8,11 @@ import {
   IonButtons,
   IonModal,
   IonButton,
-  IonicSwiper,
-  useIonAlert,
 } from "@ionic/react";
 
 import LeafletMap from "./LeafletMapCurrentObservations";
 
-import {
-  observationDetailsType,
-  fullObservationType,
-  pathCoordinateType,
-} from "../../../types";
+import { fullObservationType, pathCoordinateType } from "../../../types";
 
 import "leaflet/dist/leaflet.css";
 
@@ -33,6 +25,7 @@ interface CurrentObservationsModalProps {
   removeObservation: (observationIndex: number) => void;
 }
 
+// This is a component containing a modal for inspecting all current observations made during the supervision
 const CurrentObservationsModal: React.FC<CurrentObservationsModalProps> = ({
   modalOpen,
   setModalOpen,
@@ -41,7 +34,6 @@ const CurrentObservationsModal: React.FC<CurrentObservationsModalProps> = ({
   latestLocation,
   removeObservation,
 }) => {
-
   return (
     <IonModal isOpen={modalOpen}>
       <IonHeader translucent>

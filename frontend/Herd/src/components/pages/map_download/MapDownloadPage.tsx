@@ -8,8 +8,6 @@ import {
   IonToolbar,
   IonButtons,
   IonMenuButton,
-  useIonAlert,
-  useIonToast,
 } from "@ionic/react";
 
 import MainHamburgerMenu from "../../shared/MainHamburgerMenu";
@@ -24,6 +22,7 @@ import "leaflet/dist/leaflet.css";
 
 interface MapDownloadPageProps {}
 
+// This is the main component for the map download page
 const MapDownloadPage: React.FC<MapDownloadPageProps> = () => {
   const [latestLocation, setLatestLocation] = useState<
     locationType | undefined
@@ -32,9 +31,6 @@ const MapDownloadPage: React.FC<MapDownloadPageProps> = () => {
   const [pathCoordinates, setPathCoordinates] = useState<pathCoordinateType[]>(
     [] as pathCoordinateType[]
   );
-
-  const [presentAlert] = useIonAlert();
-  const [presentToast] = useIonToast();
 
   useEffect(() => {
     if (latestLocation && latestLocation.longitude && latestLocation.latitude) {

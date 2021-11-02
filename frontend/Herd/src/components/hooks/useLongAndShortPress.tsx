@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 
+// This is a hook for having both long and short presses on an element.
 export default function useLongAndShortPress(
   longPressCallback = () => {
     console.log("Long press callback");

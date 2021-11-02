@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Storage } from "@capacitor/storage";
+import { SecureStoragePlugin } from "capacitor-secure-storage-plugin";
 
 import {
   IonContent,
@@ -13,10 +13,7 @@ import {
   IonItem,
   IonLabel,
   IonList,
-  IonInput,
   IonToggle,
-  IonRadio,
-  IonCheckbox,
   useIonViewWillEnter,
 } from "@ionic/react";
 
@@ -26,6 +23,7 @@ import "./SettingsPage.css";
 
 interface SettingsPageProps {}
 
+// This is the main component for the settings page; it provides toggleable settings as a list
 const SettingsPage: React.FC<SettingsPageProps> = () => {
   const [shouldReadNumberOfSheepsToggle, setShouldReadNumberOfSheepsToggle] =
     useState<boolean>(true);
@@ -41,7 +39,11 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
 
   useIonViewWillEnter(async () => {
     let shouldReadNumberOfSheeps = true;
-    const { value } = await Storage.get({ key: "shouldReadNumberOfSheeps" });
+    let value;
+
+    await SecureStoragePlugin.get({
+      key: "shouldReadNumberOfSheeps",
+    }).then((readValue) => (value = readValue.value));
 
     if (value) {
       try {
@@ -49,7 +51,7 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
       } catch (err) {}
     }
 
-    await Storage.set({
+    await SecureStoragePlugin.set({
       key: "shouldReadNumberOfSheeps",
       value: JSON.stringify(shouldReadNumberOfSheeps),
     });
@@ -59,7 +61,11 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
 
   useIonViewWillEnter(async () => {
     let shouldReadNumberOfTies = true;
-    const { value } = await Storage.get({ key: "shouldReadNumberOfTies" });
+    let value;
+
+    await SecureStoragePlugin.get({
+      key: "shouldReadNumberOfTies",
+    }).then((readValue) => (value = readValue.value));
 
     if (value) {
       try {
@@ -67,7 +73,7 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
       } catch (err) {}
     }
 
-    await Storage.set({
+    await SecureStoragePlugin.set({
       key: "shouldReadNumberOfTies",
       value: JSON.stringify(shouldReadNumberOfTies),
     });
@@ -77,7 +83,11 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
 
   useIonViewWillEnter(async () => {
     let shouldReadColorOfSheeps = true;
-    const { value } = await Storage.get({ key: "shouldReadColorOfSheeps" });
+    let value;
+
+    await SecureStoragePlugin.get({
+      key: "shouldReadColorOfSheeps",
+    }).then((readValue) => (value = readValue.value));
 
     if (value) {
       try {
@@ -85,7 +95,7 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
       } catch (err) {}
     }
 
-    await Storage.set({
+    await SecureStoragePlugin.set({
       key: "shouldReadColorOfSheeps",
       value: JSON.stringify(shouldReadColorOfSheeps),
     });
@@ -95,7 +105,11 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
 
   useIonViewWillEnter(async () => {
     let shouldReadColorOfTies = true;
-    const { value } = await Storage.get({ key: "shouldReadColorOfTies" });
+    let value;
+
+    await SecureStoragePlugin.get({
+      key: "shouldReadColorOfTies",
+    }).then((readValue) => (value = readValue.value));
 
     if (value) {
       try {
@@ -103,7 +117,7 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
       } catch (err) {}
     }
 
-    await Storage.set({
+    await SecureStoragePlugin.set({
       key: "shouldReadColorOfTies",
       value: JSON.stringify(shouldReadColorOfTies),
     });
@@ -112,7 +126,7 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
   });
 
   const setToggleValue = async (key: string, isChecked: boolean) => {
-    await Storage.set({
+    await SecureStoragePlugin.set({
       key: key,
       value: JSON.stringify(isChecked),
     });
@@ -145,10 +159,7 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
                 checked={shouldReadNumberOfSheepsToggle}
                 onIonChange={(e) => {
                   setShouldReadNumberOfSheepsToggle(e.detail.checked);
-                  setToggleValue(
-                    "shouldReadNumberOfSheeps",
-                    e.detail.checked
-                  );
+                  setToggleValue("shouldReadNumberOfSheeps", e.detail.checked);
                 }}
               ></IonToggle>
             </IonItem>
@@ -163,10 +174,7 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
                 checked={shouldReadNumberOfTiesToggle}
                 onIonChange={(e) => {
                   setShouldReadNumberOfTiesToggle(e.detail.checked);
-                  setToggleValue(
-                    "shouldReadNumberOfTies",
-                    e.detail.checked
-                  );
+                  setToggleValue("shouldReadNumberOfTies", e.detail.checked);
                 }}
               ></IonToggle>
             </IonItem>
@@ -181,10 +189,7 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
                 checked={shouldReadColorOfSheepsToggle}
                 onIonChange={(e) => {
                   setShouldReadColorOfSheepsToggle(e.detail.checked);
-                  setToggleValue(
-                    "shouldReadColorOfSheeps",
-                    e.detail.checked
-                  );
+                  setToggleValue("shouldReadColorOfSheeps", e.detail.checked);
                 }}
               ></IonToggle>
             </IonItem>

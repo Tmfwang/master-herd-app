@@ -1,7 +1,7 @@
 import { locationType } from "../../types";
 import { registerPlugin } from "@capacitor/core";
 import { BackgroundGeolocationPlugin } from "@capacitor-community/background-geolocation";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 const BackgroundGeolocation = registerPlugin<BackgroundGeolocationPlugin>(
   "BackgroundGeolocation"
 );
@@ -10,6 +10,7 @@ interface GeolocatorProps {
   latestLocationUpdateCallback: (location: locationType) => void;
 }
 
+// This is a component for Geolocation. Tracks the user when the app is both in the foreground and the background, and it only updates the location every 10 meters moved.
 const Geolocator: React.FC<GeolocatorProps> = ({
   latestLocationUpdateCallback,
 }) => {

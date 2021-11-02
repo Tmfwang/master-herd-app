@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOMServer from "react-dom/server";
 
 import { supervisionType } from "../../../types";
@@ -130,6 +130,9 @@ interface LeafletMapProps {
   supervision: supervisionType;
 }
 
+// This is the leaflet map component for inspecting a supervision. It draws the recorded path on the map, 
+// as well as all observations made during the supervision. The observation markers can be clicked to reveal 
+// more information about it in a popup.
 const LeafletMap: React.FC<LeafletMapProps> = ({ supervision }) => {
   const [map, setMap] = useState<Map | undefined>();
 

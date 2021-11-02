@@ -13,10 +13,8 @@ import {
   IonItem,
   IonItemGroup,
   IonLabel,
-  IonListHeader,
   IonList,
   IonNote,
-  IonContent,
   useIonAlert,
 } from "@ionic/react";
 
@@ -142,6 +140,9 @@ interface LeafletMapProps {
   removeObservation: (observationIndex: number) => void;
 }
 
+// This is the leaflet map component for inspecting the observations for the current supervision.
+// It draws the recorded path on the map, as well as all observations made during the supervision.
+// The observation markers can be clicked to reveal more information about it in a popup.
 const LeafletMap: React.FC<LeafletMapProps> = ({
   allObservations,
   pathCoordinates,

@@ -1,17 +1,4 @@
-import { useEffect, useState } from "react";
-
-import {
-  IonContent,
-  IonHeader,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-  IonButtons,
-  IonMenuButton,
-  useIonAlert,
-  useIonToast,
-  IonRippleEffect,
-} from "@ionic/react";
+import { IonRippleEffect } from "@ionic/react";
 
 import { observationButtonType } from "../../../types";
 
@@ -21,6 +8,7 @@ interface ObservationButtonGroupProps {
   activeButton: string;
 }
 
+// This component contains a simple set of buttons where one of them can be selected
 const ObservationButtonGroup: React.FC<ObservationButtonGroupProps> = ({
   observationButtonList,
   onActiveChange,

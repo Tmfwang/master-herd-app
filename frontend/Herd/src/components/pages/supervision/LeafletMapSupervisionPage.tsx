@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { locationType, pathCoordinateType } from "../../../types";
 
@@ -29,6 +29,8 @@ interface LeafletMapProps {
   pathCoordinates: pathCoordinateType[];
 }
 
+// This is a map component that's used to register observations. It shows the user's position as a marker
+// on the map, as well as a "reticle" that can be moved to represent the location of the observed elements.
 const LeafletMap: React.FC<LeafletMapProps> = ({
   latestLocation,
   crosshairLocation,
@@ -149,8 +151,6 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
             longitude: map.getCenter().lng,
           });
         });
-
-        
 
         setCrosshairMarker(newCrosshairMarker);
       }

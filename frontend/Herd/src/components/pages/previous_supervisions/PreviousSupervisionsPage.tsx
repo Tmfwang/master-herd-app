@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import { Storage } from "@capacitor/storage";
+import { SecureStoragePlugin } from "capacitor-secure-storage-plugin";
 
 import {
   IonContent,
@@ -15,7 +15,9 @@ import {
   IonLabel,
   IonListHeader,
   IonIcon,
+  IonLoading,
   useIonViewWillEnter,
+  useIonViewDidLeave,
 } from "@ionic/react";
 
 import { cloudOfflineOutline } from "ionicons/icons";
@@ -30,8 +32,11 @@ import "./PreviousSupervisionsPage.css";
 
 interface PreviousSupervisionsPageProps {}
 
+// This is the main component for the previous supervisions page; it lists all previous supervisions.
 const PreviousSupervisionsPage: React.FC<PreviousSupervisionsPageProps> =
   () => {
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+
     const [allSupervisions, setAllSupervisions] = useState<supervisionType[]>(
       [] as supervisionType[]
     );
@@ -39,8 +44,20 @@ const PreviousSupervisionsPage: React.FC<PreviousSupervisionsPageProps> =
     const [currentInspectedSupervision, setCurrentInspectedSupervision] =
       useState<supervisionType | null>(null);
 
+    useIonViewDidLeave(() => {
+      setIsLoading(true);
+    });
+
     useIonViewWillEnter(async () => {
-      const { value } = await Storage.get({ key: "allSupervisions" });
+      let value = "";
+      await SecureStoragePlugin.get({
+        key: "allSupervisions",
+      })
+        .then((readValue) => {
+          value = readValue.value;
+          setIsLoading(false);
+        })
+        .catch(() => setIsLoading(false));
 
       if (value) {
         try {
@@ -221,21 +238,30 @@ const PreviousSupervisionsPage: React.FC<PreviousSupervisionsPageProps> =
                   .reverse()}
               </IonList>
             )}
-            {allSupervisions.length === 0 && (
-              <div
-                style={{
-                  width: "60%",
-                  textAlign: "center",
-                  marginTop: "50px",
-                  margin: "auto",
-                }}
-              >
-                Du har ingen lagrede tilsynturer. <br />
-                <br />
-                Du kan utføre en ny tilsyntur ved å trykke på "Start ny
-                tilsynstur" i sidemenyen.
+            {allSupervisions.length === 0 && !isLoading && (
+              <div>
+                <div
+                  style={{
+                    height: "100px",
+                  }}
+                ></div>
+                <div
+                  style={{
+                    width: "60%",
+                    height: "50%",
+                    textAlign: "center",
+                    margin: "auto",
+                  }}
+                >
+                  Du har ingen lagrede tilsynturer. <br />
+                  <br />
+                  Du kan utføre en ny tilsyntur ved å trykke på "Start ny
+                  tilsynstur" i sidemenyen.
+                </div>
               </div>
             )}
+
+            <IonLoading isOpen={isLoading} message="Laster..."></IonLoading>
           </IonContent>
         </IonPage>
       </>

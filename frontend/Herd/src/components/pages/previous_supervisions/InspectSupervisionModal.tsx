@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 import { supervisionType } from "../../../types";
 
 import {
@@ -10,8 +8,6 @@ import {
   IonButtons,
   IonModal,
   IonButton,
-  IonicSwiper,
-  useIonAlert,
 } from "@ionic/react";
 
 import LeafletMap from "./LeafletMapInspectSupervision";
@@ -23,6 +19,7 @@ interface InspectSupervisionModalProps {
   setSupervision: (supervision: supervisionType | null) => void;
 }
 
+// This is a modal component for inspecting a single supervision; it mainly contains the leaflet map component
 const InspectSupervisionModal: React.FC<InspectSupervisionModalProps> = ({
   supervision,
   setSupervision,

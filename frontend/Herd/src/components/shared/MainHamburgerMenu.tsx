@@ -34,6 +34,7 @@ import { getStorageLength } from "leaflet.offline/src/TileManager";
 
 interface MainHamburgerMenuProps {}
 
+// A shared component containing the hamburger/side menu and all its contents
 const MainHamburgerMenu: React.FC<MainHamburgerMenuProps> = () => {
   const [presentAlert] = useIonAlert();
   const [presentToast] = useIonToast();

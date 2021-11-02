@@ -23,6 +23,7 @@ interface SupervisionHamburgerMenuProps {
   seeCurrentObservations: () => void;
 }
 
+// This is the hamburger/side menu specific for when on the supervision page
 const SupervisionHamburgerMenu: React.FC<SupervisionHamburgerMenuProps> = ({
   finishSupervision,
   cancelSupervision,
