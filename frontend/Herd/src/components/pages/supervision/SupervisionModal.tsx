@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { SecureStoragePlugin } from "capacitor-secure-storage-plugin";
+import { Storage } from "@capacitor/storage";
 
 import {
   IonContent,
@@ -380,7 +380,7 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
     let shouldReadNumberOfSheeps = true;
     let value;
 
-    await SecureStoragePlugin.get({
+    await Storage.get({
       key: "shouldReadNumberOfSheeps",
     }).then((readValue) => (value = readValue.value));
 
@@ -390,7 +390,7 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
       } catch (err) {}
     }
 
-    await SecureStoragePlugin.set({
+    await Storage.set({
       key: "shouldReadNumberOfSheeps",
       value: JSON.stringify(shouldReadNumberOfSheeps),
     });
@@ -402,7 +402,7 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
     let shouldReadNumberOfTies = true;
     let value;
 
-    await SecureStoragePlugin.get({
+    await Storage.get({
       key: "shouldReadNumberOfTies",
     }).then((readValue) => (value = readValue.value));
 
@@ -412,7 +412,7 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
       } catch (err) {}
     }
 
-    await SecureStoragePlugin.set({
+    await Storage.set({
       key: "shouldReadNumberOfTies",
       value: JSON.stringify(shouldReadNumberOfTies),
     });
@@ -424,7 +424,7 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
     let shouldReadColorOfSheeps = true;
     let value;
 
-    await SecureStoragePlugin.get({
+    await Storage.get({
       key: "shouldReadColorOfSheeps",
     }).then((readValue) => (value = readValue.value));
 
@@ -434,7 +434,7 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
       } catch (err) {}
     }
 
-    await SecureStoragePlugin.set({
+    await Storage.set({
       key: "shouldReadColorOfSheeps",
       value: JSON.stringify(shouldReadColorOfSheeps),
     });
@@ -446,7 +446,7 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
     let shouldReadColorOfTies = true;
     let value;
 
-    await SecureStoragePlugin.get({
+    await Storage.get({
       key: "shouldReadColorOfTies",
     }).then((readValue) => (value = readValue.value));
 
@@ -456,7 +456,7 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
       } catch (err) {}
     }
 
-    await SecureStoragePlugin.set({
+    await Storage.set({
       key: "shouldReadColorOfTies",
       value: JSON.stringify(shouldReadColorOfTies),
     });

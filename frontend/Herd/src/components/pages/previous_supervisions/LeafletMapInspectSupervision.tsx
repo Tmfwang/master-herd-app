@@ -130,8 +130,8 @@ interface LeafletMapProps {
   supervision: supervisionType;
 }
 
-// This is the leaflet map component for inspecting a supervision. It draws the recorded path on the map, 
-// as well as all observations made during the supervision. The observation markers can be clicked to reveal 
+// This is the leaflet map component for inspecting a supervision. It draws the recorded path on the map,
+// as well as all observations made during the supervision. The observation markers can be clicked to reveal
 // more information about it in a popup.
 const LeafletMap: React.FC<LeafletMapProps> = ({ supervision }) => {
   const [map, setMap] = useState<Map | undefined>();
@@ -176,7 +176,11 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ supervision }) => {
       if (pathPolyline) {
         pathPolyline.setLatLngs(polylinePoints);
       } else if (map) {
-        let newPolyline = L.polyline(polylinePoints, { weight: 6 });
+        let newPolyline = L.polyline(polylinePoints, {
+          weight: 6,
+          stroke: true,
+          color: "black",
+        });
         setPathPolyline(newPolyline);
 
         newPolyline.addTo(map);
