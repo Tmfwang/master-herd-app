@@ -10,7 +10,8 @@ interface GeolocatorProps {
   latestLocationUpdateCallback: (location: locationType) => void;
 }
 
-// This is a component for Geolocation. Tracks the user when the app is both in the foreground and the background, and it only updates the location every 10 meters moved.
+// This is a component for Geolocation. Tracks the user when the app is either in the foreground
+// or the background, and it only updates the location every 50 meters moved.
 const Geolocator: React.FC<GeolocatorProps> = ({
   latestLocationUpdateCallback,
 }) => {
@@ -30,7 +31,7 @@ const Geolocator: React.FC<GeolocatorProps> = ({
         backgroundTitle: "GPS er aktivert",
         requestPermissions: true,
         stale: false,
-        distanceFilter: 10,
+        distanceFilter: 50,
       },
 
       function callback(location, error) {

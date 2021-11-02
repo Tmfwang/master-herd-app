@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { SecureStoragePlugin } from "capacitor-secure-storage-plugin";
+import { Storage } from "@capacitor/storage";
 
 import {
   IonContent,
@@ -41,7 +41,7 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
     let shouldReadNumberOfSheeps = true;
     let value;
 
-    await SecureStoragePlugin.get({
+    await Storage.get({
       key: "shouldReadNumberOfSheeps",
     }).then((readValue) => (value = readValue.value));
 
@@ -51,7 +51,7 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
       } catch (err) {}
     }
 
-    await SecureStoragePlugin.set({
+    await Storage.set({
       key: "shouldReadNumberOfSheeps",
       value: JSON.stringify(shouldReadNumberOfSheeps),
     });
@@ -63,7 +63,7 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
     let shouldReadNumberOfTies = true;
     let value;
 
-    await SecureStoragePlugin.get({
+    await Storage.get({
       key: "shouldReadNumberOfTies",
     }).then((readValue) => (value = readValue.value));
 
@@ -73,7 +73,7 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
       } catch (err) {}
     }
 
-    await SecureStoragePlugin.set({
+    await Storage.set({
       key: "shouldReadNumberOfTies",
       value: JSON.stringify(shouldReadNumberOfTies),
     });
@@ -85,7 +85,7 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
     let shouldReadColorOfSheeps = true;
     let value;
 
-    await SecureStoragePlugin.get({
+    await Storage.get({
       key: "shouldReadColorOfSheeps",
     }).then((readValue) => (value = readValue.value));
 
@@ -95,7 +95,7 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
       } catch (err) {}
     }
 
-    await SecureStoragePlugin.set({
+    await Storage.set({
       key: "shouldReadColorOfSheeps",
       value: JSON.stringify(shouldReadColorOfSheeps),
     });
@@ -107,7 +107,7 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
     let shouldReadColorOfTies = true;
     let value;
 
-    await SecureStoragePlugin.get({
+    await Storage.get({
       key: "shouldReadColorOfTies",
     }).then((readValue) => (value = readValue.value));
 
@@ -117,7 +117,7 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
       } catch (err) {}
     }
 
-    await SecureStoragePlugin.set({
+    await Storage.set({
       key: "shouldReadColorOfTies",
       value: JSON.stringify(shouldReadColorOfTies),
     });
@@ -126,7 +126,7 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
   });
 
   const setToggleValue = async (key: string, isChecked: boolean) => {
-    await SecureStoragePlugin.set({
+    await Storage.set({
       key: key,
       value: JSON.stringify(isChecked),
     });
