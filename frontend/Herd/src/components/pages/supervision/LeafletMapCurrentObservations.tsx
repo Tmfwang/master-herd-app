@@ -274,7 +274,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
 
           let lineBetweenMarkers = L.polyline(
             [userMarker.getLatLng(), observationMarker.getLatLng()],
-            { weight: 4, color: "black" }
+            { weight: 4, color: "black", opacity: 0.5, dashArray: [10, 10] }
           );
 
           // Add a popup to the marker and listeners on popup open and close,
@@ -351,6 +351,19 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
     });
   };
 
+  const calculateTotalSheep = (sheepType: string, observationIndex: number) => {
+    let observation = allObservations[observationIndex];
+
+    return (
+      // @ts-ignore
+      observation["observationDetails"]["gruppeSau"][sheepType]["hvitOrGra"] +
+      // @ts-ignore
+      observation["observationDetails"]["gruppeSau"][sheepType]["brun"] +
+      // @ts-ignore
+      observation["observationDetails"]["gruppeSau"][sheepType]["sort"]
+    );
+  };
+
   const generatePopupHtmlString = (observationIndex: number) => {
     let observation = allObservations[observationIndex];
     let dateRegistered = new Date(
@@ -362,7 +375,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
         return ReactDOMServer.renderToString(
           <div
             style={{
-              width: "200px",
+              width: "210px",
               height: "330px",
               display: "flex",
               flexDirection: "column",
@@ -373,7 +386,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
               <div
                 style={{
                   position: "fixed",
-                  width: "200px",
+                  width: "210px",
                   height: "40px",
                   bottom: "70px",
                   zIndex: 9999,
@@ -398,6 +411,46 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
 
                   <IonItem>
                     <IonLabel>{dateRegistered}</IonLabel>
+                  </IonItem>
+                </IonItemGroup>
+
+                <IonItemGroup>
+                  <IonItemDivider>
+                    <IonLabel>Antall</IonLabel>
+                  </IonItemDivider>
+
+                  <IonItem>
+                    <IonLabel>Generelle sau</IonLabel>
+                    <IonNote slot="end" style={{ fontSize: "16px" }}>
+                      {calculateTotalSheep("fargePaSau", observationIndex)}
+                    </IonNote>
+                  </IonItem>
+
+                  <IonItem>
+                    <IonLabel>Søyer</IonLabel>
+                    <IonNote slot="end" style={{ fontSize: "16px" }}>
+                      {calculateTotalSheep("fargePaSoye", observationIndex)}
+                    </IonNote>
+                  </IonItem>
+
+                  <IonItem>
+                    <IonLabel>Lam</IonLabel>
+                    <IonNote slot="end" style={{ fontSize: "16px" }}>
+                      {calculateTotalSheep("fargePaLam", observationIndex)}
+                    </IonNote>
+                  </IonItem>
+
+                  <IonItem>
+                    <IonLabel>
+                      <i>Sau totalt</i>
+                    </IonLabel>
+                    <IonNote slot="end" style={{ fontSize: "16px" }}>
+                      <i>
+                        {calculateTotalSheep("fargePaSau", observationIndex) +
+                          calculateTotalSheep("fargePaSoye", observationIndex) +
+                          calculateTotalSheep("fargePaLam", observationIndex)}
+                      </i>
+                    </IonNote>
                   </IonItem>
                 </IonItemGroup>
 
