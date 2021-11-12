@@ -25,10 +25,21 @@ import { cloudOfflineOutline } from "ionicons/icons";
 import MainHamburgerMenu from "../../shared/MainHamburgerMenu";
 import InspectSupervisionModal from "./InspectSupervisionModal";
 
-import { supervisionType } from "../../../types";
+import {
+  fullObservationType,
+  observationDetailsType,
+  supervisionType,
+} from "../../../types";
 
 import "leaflet/dist/leaflet.css";
 import "./PreviousSupervisionsPage.css";
+
+const allObservationTypes = {
+  gruppeSau: "gruppeSau",
+  rovdyr: "rovdyr",
+  skadetSau: "skadetSau",
+  dodSau: "dodSau",
+};
 
 interface PreviousSupervisionsPageProps {}
 
@@ -94,6 +105,40 @@ const PreviousSupervisionsPage: React.FC<PreviousSupervisionsPageProps> =
       );
     };
 
+    const calculateTotalSheep = (supervision: supervisionType) => {
+      let totalSheep = 0;
+
+      for (let observation of supervision.allObservations) {
+        totalSheep += calculateTotalSheepbyType("fargePaSau", observation);
+        totalSheep += calculateTotalSheepbyType("fargePaSoye", observation);
+        totalSheep += calculateTotalSheepbyType("fargePaLam", observation);
+
+        if (
+          observation.observationDetails.alle.typeObservasjon ===
+            allObservationTypes.dodSau ||
+          observation.observationDetails.alle.typeObservasjon ===
+            allObservationTypes.skadetSau
+        ) {
+          totalSheep += 1;
+        }
+      }
+      return totalSheep;
+    };
+
+    const calculateTotalSheepbyType = (
+      sheepType: string,
+      observation: fullObservationType
+    ) => {
+      return (
+        // @ts-ignore
+        observation["observationDetails"]["gruppeSau"][sheepType]["hvitOrGra"] +
+        // @ts-ignore
+        observation["observationDetails"]["gruppeSau"][sheepType]["brun"] +
+        // @ts-ignore
+        observation["observationDetails"]["gruppeSau"][sheepType]["sort"]
+      );
+    };
+
     return (
       <>
         <MainHamburgerMenu />
@@ -122,7 +167,7 @@ const PreviousSupervisionsPage: React.FC<PreviousSupervisionsPageProps> =
                 </IonListHeader>
 
                 {allSupervisions
-                  .map((supervision) => {
+                  .map((supervision: supervisionType) => {
                     return (
                       <IonItem
                         button
@@ -154,7 +199,7 @@ const PreviousSupervisionsPage: React.FC<PreviousSupervisionsPageProps> =
                               >
                                 <div
                                   style={{
-                                    marginRight: "5px",
+                                    marginRight: "30px",
                                     fontWeight: "bold",
                                   }}
                                 >
@@ -176,12 +221,13 @@ const PreviousSupervisionsPage: React.FC<PreviousSupervisionsPageProps> =
                                     fontWeight: "bold",
                                   }}
                                 >
-                                  Starttid:
+                                  Varighet:
                                 </div>
                                 <div>
-                                  {new Date(supervision.whenStarted)
-                                    .toLocaleTimeString("no-no")
-                                    .substring(0, 5)}
+                                  {createTimeDifferenceString(
+                                    supervision.whenStarted,
+                                    supervision.whenEnded
+                                  )}
                                 </div>
                               </div>
                             </div>
@@ -200,18 +246,13 @@ const PreviousSupervisionsPage: React.FC<PreviousSupervisionsPageProps> =
                               >
                                 <div
                                   style={{
-                                    marginRight: "5px",
+                                    marginRight: "10px",
                                     fontWeight: "bold",
                                   }}
                                 >
-                                  Varighet:
+                                  Observasjoner:
                                 </div>
-                                <div>
-                                  {createTimeDifferenceString(
-                                    supervision.whenStarted,
-                                    supervision.whenEnded
-                                  )}
-                                </div>
+                                <div>{supervision.allObservations.length}</div>
                               </div>
                               <div
                                 style={{
@@ -225,9 +266,9 @@ const PreviousSupervisionsPage: React.FC<PreviousSupervisionsPageProps> =
                                     fontWeight: "bold",
                                   }}
                                 >
-                                  Observasjoner:
+                                  Antall sau:
                                 </div>
-                                <div>{supervision.allObservations.length}</div>
+                                <div>{calculateTotalSheep(supervision)}</div>
                               </div>
                             </div>
                           </div>
