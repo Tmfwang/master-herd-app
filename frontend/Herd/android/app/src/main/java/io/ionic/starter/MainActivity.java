@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package herd.app.tmfwang;
 
 import com.getcapacitor.BridgeActivity;
 
