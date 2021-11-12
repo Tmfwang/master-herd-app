@@ -382,7 +382,9 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
 
     await Storage.get({
       key: "shouldReadNumberOfSheeps",
-    }).then((readValue) => (value = readValue.value));
+    })
+      .then((readValue) => (value = readValue.value))
+      .catch(() => {});
 
     if (value) {
       try {
@@ -404,7 +406,9 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
 
     await Storage.get({
       key: "shouldReadNumberOfTies",
-    }).then((readValue) => (value = readValue.value));
+    })
+      .then((readValue) => (value = readValue.value))
+      .catch(() => {});
 
     if (value) {
       try {
@@ -426,7 +430,9 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
 
     await Storage.get({
       key: "shouldReadColorOfSheeps",
-    }).then((readValue) => (value = readValue.value));
+    })
+      .then((readValue) => (value = readValue.value))
+      .catch(() => {});
 
     if (value) {
       try {
@@ -448,7 +454,9 @@ const SupervisionModal: React.FC<SupervisionModalProps> = ({
 
     await Storage.get({
       key: "shouldReadColorOfTies",
-    }).then((readValue) => (value = readValue.value));
+    })
+      .then((readValue) => (value = readValue.value))
+      .catch(() => {});
 
     if (value) {
       try {

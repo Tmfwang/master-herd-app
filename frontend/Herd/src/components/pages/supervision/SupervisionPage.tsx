@@ -167,7 +167,9 @@ const SupervisionPage: React.FC<SupervisionPageProps> = () => {
       let value;
       await SecureStoragePlugin.get({
         key: "allSupervisions",
-      }).then((readValue) => (value = readValue.value));
+      })
+        .then((readValue) => (value = readValue.value))
+        .catch(() => {});
 
       if (value) {
         try {
