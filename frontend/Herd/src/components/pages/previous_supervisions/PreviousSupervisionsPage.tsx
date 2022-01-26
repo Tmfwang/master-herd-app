@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { SecureStoragePlugin } from "capacitor-secure-storage-plugin";
+import { Storage } from "@capacitor/storage";
 
 import {
   IonContent,
@@ -60,8 +60,8 @@ const PreviousSupervisionsPage: React.FC<PreviousSupervisionsPageProps> =
     });
 
     useIonViewWillEnter(async () => {
-      let value = "";
-      await SecureStoragePlugin.get({
+      let value;
+      await Storage.get({
         key: "allSupervisions",
       })
         .then((readValue) => {

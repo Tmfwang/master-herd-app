@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { SecureStoragePlugin } from "capacitor-secure-storage-plugin";
+import { Storage } from "@capacitor/storage";
 
 import { useHistory } from "react-router-dom";
 
@@ -165,7 +165,7 @@ const SupervisionPage: React.FC<SupervisionPageProps> = () => {
       let allSupervisions = [] as supervisionType[];
 
       let value;
-      await SecureStoragePlugin.get({
+      await Storage.get({
         key: "allSupervisions",
       })
         .then((readValue) => (value = readValue.value))
@@ -184,7 +184,7 @@ const SupervisionPage: React.FC<SupervisionPageProps> = () => {
         whenEnded: new Date().toISOString(),
       });
 
-      await SecureStoragePlugin.set({
+      await Storage.set({
         key: "allSupervisions",
         value: JSON.stringify(allSupervisions),
       });

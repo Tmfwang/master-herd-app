@@ -150,11 +150,11 @@ const MainHamburgerMenu: React.FC<MainHamburgerMenuProps> = () => {
               <IonLabel>Brukerprofil</IonLabel>
             </IonItemDivider>
 
-            <IonItem href="/">
+            <IonItem href="/login">
               <IonIcon slot="start" icon={logInOutline}></IonIcon>
               <IonLabel>Logg inn</IonLabel>
             </IonItem>
-            <IonItem href="/">
+            <IonItem href="/register">
               <IonIcon slot="start" icon={createOutline}></IonIcon>
               <IonLabel>Registrer bruker</IonLabel>
             </IonItem>
