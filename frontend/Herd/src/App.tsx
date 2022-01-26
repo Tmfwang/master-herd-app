@@ -3,6 +3,8 @@ import { IonApp, IonRouterOutlet, setupConfig } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 
 import Home from "./components/pages/home/HomePage";
+import LoginPage from "./components/pages/login/LoginPage";
+import RegisterPage from "./components/pages/register/RegisterPage";
 import Settings from "./components/pages/settings/SettingsPage";
 import MapDownloadPage from "./components/pages/map_download/MapDownloadPage";
 import SupervisionPage from "./components/pages/supervision/SupervisionPage";
@@ -51,9 +53,14 @@ const App: React.FC = () => {
             <PreviousSupervisionsPage />
           </Route>
           <Route exact path="/settings">
-            <SettingsPage />
+            <Settings />
           </Route>
-
+          <Route exact path="/login">
+            <LoginPage />
+          </Route>
+          <Route exact path="/register">
+            <RegisterPage />
+          </Route>
           <Route exact path="/">
             <Redirect to="/home" />
           </Route>
