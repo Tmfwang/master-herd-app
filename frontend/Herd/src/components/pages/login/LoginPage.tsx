@@ -1,6 +1,9 @@
 import { useState } from "react";
 
+import axios from "axios";
+
 import { Storage } from "@capacitor/storage";
+import { SecureStoragePlugin } from "capacitor-secure-storage-plugin";
 
 import {
   IonContent,
@@ -26,6 +29,7 @@ import { logInOutline } from "ionicons/icons";
 import MainHamburgerMenu from "../../shared/MainHamburgerMenu";
 
 import "./LoginPage.css";
+import { request } from "https";
 
 interface LoginPageProps {}
 
@@ -34,8 +38,22 @@ const LoginPage: React.FC<LoginPageProps> = () => {
   const [email, setEmail] = useState<string>();
   const [password, setPassword] = useState<string>();
 
-  const handleLogin = () => {
-    alert("YO");
+  // http://192.168.1.17:8080/supervision/a3d4dedc-e508-4ab1-a97f-7e31471d9bdb
+  const handleLogin = async () => {
+    axios
+      .get(
+        "http://192.168.1.17:8080/supervision/a3d4dedc-e508-4ab1-a97f-7e31471d9bdb"
+      )
+      .then(async (response) => {
+        // await SecureStoragePlugin.set({
+        //   key: "authenticationToken",
+        //   value: response.data.token,
+        // });
+        alert(response);
+      })
+      .catch((e) => {
+        alert(e.message);
+      });
   };
 
   return (
