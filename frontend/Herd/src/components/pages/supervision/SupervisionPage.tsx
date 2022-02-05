@@ -178,6 +178,7 @@ const SupervisionPage: React.FC<SupervisionPageProps> = () => {
       }
 
       allSupervisions.push({
+        id: "",
         allObservations: allObservations,
         fullPath: pathCoordinates,
         whenStarted: whenStarted,

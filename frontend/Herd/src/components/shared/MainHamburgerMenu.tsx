@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   IonContent,
   IonHeader,
@@ -13,6 +13,7 @@ import {
   IonIcon,
   useIonAlert,
   useIonToast,
+  useIonViewWillEnter,
 } from "@ionic/react";
 
 import {
@@ -24,6 +25,7 @@ import {
   settingsOutline,
   logInOutline,
   createOutline,
+  logOutOutline,
 } from "ionicons/icons";
 
 // @ts-ignore
@@ -32,12 +34,50 @@ import { truncate } from "leaflet.offline";
 // @ts-ignore
 import { getStorageLength } from "leaflet.offline/src/TileManager";
 
+import { SecureStoragePlugin } from "capacitor-secure-storage-plugin";
+import { useHistory } from "react-router";
+
 interface MainHamburgerMenuProps {}
 
 // A shared component containing the hamburger/side menu and all its contents
 const MainHamburgerMenu: React.FC<MainHamburgerMenuProps> = () => {
   const [presentAlert] = useIonAlert();
   const [presentToast] = useIonToast();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  let history = useHistory();
+
+  useIonViewWillEnter(async () => {
+    let value;
+    await SecureStoragePlugin.get({
+      key: "authenticationToken",
+    })
+      // @ts-ignore
+      .then((readValue) => {
+        value = readValue.value;
+
+        if (value) {
+          setIsLoggedIn(true);
+        } else {
+          setIsLoggedIn(false);
+        }
+      })
+      .catch(() => setIsLoggedIn(false));
+  });
+
+  async function handleLogOut() {
+    await SecureStoragePlugin.set({
+      key: "authenticationToken",
+      value: "",
+    }).then(() => {
+      presentToast({
+        header: "Logget ut",
+        duration: 5000,
+      });
+
+      history.push("/");
+    });
+  }
 
   // Asks user for confirmation of map deletion, or give them a specific message if they have no downloaded maps
   async function handleDeleteMapsClicked() {
@@ -150,14 +190,30 @@ const MainHamburgerMenu: React.FC<MainHamburgerMenuProps> = () => {
               <IonLabel>Brukerprofil</IonLabel>
             </IonItemDivider>
 
-            <IonItem href="/login">
-              <IonIcon slot="start" icon={logInOutline}></IonIcon>
-              <IonLabel>Logg inn</IonLabel>
-            </IonItem>
-            <IonItem href="/register">
-              <IonIcon slot="start" icon={createOutline}></IonIcon>
-              <IonLabel>Registrer bruker</IonLabel>
-            </IonItem>
+            {!isLoggedIn && (
+              <>
+                <IonItem href="/login">
+                  <IonIcon slot="start" icon={logInOutline}></IonIcon>
+                  <IonLabel>Logg inn</IonLabel>
+                </IonItem>
+                <IonItem href="/register">
+                  <IonIcon slot="start" icon={createOutline}></IonIcon>
+                  <IonLabel>Registrer bruker</IonLabel>
+                </IonItem>
+              </>
+            )}
+
+            {isLoggedIn && (
+              <IonItem
+                button
+                onClick={() => {
+                  handleLogOut();
+                }}
+              >
+                <IonIcon slot="start" icon={logOutOutline}></IonIcon>
+                <IonLabel>Logg ut</IonLabel>
+              </IonItem>
+            )}
           </IonItemGroup>
         </IonList>
       </IonContent>
