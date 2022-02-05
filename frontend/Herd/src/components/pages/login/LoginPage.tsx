@@ -2,7 +2,6 @@ import { useState } from "react";
 
 import axios from "axios";
 
-import { Storage } from "@capacitor/storage";
 import { SecureStoragePlugin } from "capacitor-secure-storage-plugin";
 
 import {
@@ -22,6 +21,7 @@ import {
   IonToggle,
   IonIcon,
   useIonViewWillEnter,
+  useIonToast,
 } from "@ionic/react";
 
 import { logInOutline } from "ionicons/icons";
@@ -30,6 +30,7 @@ import MainHamburgerMenu from "../../shared/MainHamburgerMenu";
 
 import "./LoginPage.css";
 import { request } from "https";
+import { useHistory } from "react-router";
 
 interface LoginPageProps {}
 
@@ -38,21 +39,55 @@ const LoginPage: React.FC<LoginPageProps> = () => {
   const [email, setEmail] = useState<string>();
   const [password, setPassword] = useState<string>();
 
-  // http://192.168.1.17:8080/supervision/a3d4dedc-e508-4ab1-a97f-7e31471d9bdb
+  const [presentToast] = useIonToast();
+  let history = useHistory();
+  
+
   const handleLogin = async () => {
     axios
-      .get(
-        "http://192.168.1.17:8080/supervision/a3d4dedc-e508-4ab1-a97f-7e31471d9bdb"
+      .post(
+        "https://master-herd-api.herokuapp.com/api-token-auth/",
+        {
+          username: email?.toLowerCase(),
+          password: password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       )
       .then(async (response) => {
-        // await SecureStoragePlugin.set({
-        //   key: "authenticationToken",
-        //   value: response.data.token,
-        // });
-        alert(response);
+        if (response.status === 200) {
+          await SecureStoragePlugin.set({
+            key: "authenticationToken",
+            value: response.data.token,
+          }).then(() => {
+            presentToast({
+              header: "Logget inn som " + email?.toLowerCase(),
+              duration: 5000,
+            });
+
+            setEmail("");
+            setPassword("");
+            history.push("/");
+          });
+        } else {
+          presentToast({
+            header: "Noe gikk galt",
+            message:
+              "Sjekk at du skrevet riktig e-post og passord, og prøv igjen",
+            duration: 5000,
+          });
+        }
       })
       .catch((e) => {
-        alert(e.message);
+        presentToast({
+          header: "Noe gikk galt",
+          message:
+            "Sjekk at du skrevet riktig e-post og passord, og prøv igjen",
+          duration: 5000,
+        });
       });
   };
 
@@ -89,6 +124,7 @@ const LoginPage: React.FC<LoginPageProps> = () => {
                 placeholder="E-post"
                 onIonChange={(e) => setEmail(e.detail.value!)}
                 clearInput
+                type="email"
               ></IonInput>
             </IonItem>
 
@@ -98,6 +134,7 @@ const LoginPage: React.FC<LoginPageProps> = () => {
                 placeholder="Passord"
                 onIonChange={(e) => setPassword(e.detail.value!)}
                 clearInput
+                type="password"
               ></IonInput>
             </IonItem>
 

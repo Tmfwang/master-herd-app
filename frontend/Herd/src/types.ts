@@ -111,6 +111,7 @@ export type fullObservationType = {
 };
 
 export type supervisionType = {
+  id: string;
   allObservations: fullObservationType[];
   fullPath: pathCoordinateType[];
   whenStarted: string;

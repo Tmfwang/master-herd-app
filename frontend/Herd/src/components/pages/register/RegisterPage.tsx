@@ -1,6 +1,9 @@
 import { useState } from "react";
 
-import { Storage } from "@capacitor/storage";
+import axios from "axios";
+import { useHistory } from "react-router";
+
+import { SecureStoragePlugin } from "capacitor-secure-storage-plugin";
 
 import {
   IonContent,
@@ -19,6 +22,7 @@ import {
   IonToggle,
   IonIcon,
   useIonViewWillEnter,
+  useIonToast,
 } from "@ionic/react";
 
 import { personCircleOutline } from "ionicons/icons";
@@ -39,8 +43,65 @@ const RegisterPage: React.FC<RegisterPageProps> = () => {
   const [password1, setPassword1] = useState<string>();
   const [password2, setPassword2] = useState<string>();
 
+  const [presentToast] = useIonToast();
+  let history = useHistory();
+
   const handleRegistration = () => {
-    alert("YO");
+    axios
+      .post(
+        "https://master-herd-api.herokuapp.com/user/",
+        {
+          email: email?.toLowerCase(),
+          password1: password1,
+          password2: password2,
+          full_name: fullName,
+          gaards_number: gaardsNumber,
+          bruks_number: bruksNumber,
+          municipality: municipality,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then(async (response) => {
+        if (response.status === 201) {
+          await SecureStoragePlugin.set({
+            key: "authenticationToken",
+            value: response.data.token,
+          }).then(() => {
+            presentToast({
+              header:
+                "Brukerprofil opprettet, og logget inn som " +
+                email?.toLowerCase(),
+              duration: 6000,
+            });
+
+            setEmail("");
+            setPassword1("");
+            setPassword2("");
+            setFullName("");
+            setBruksNumber("");
+            setGaardsNumber("");
+            setMunicipality("");
+            history.push("/");
+          });
+        } else {
+          presentToast({
+            header: "Noe gikk galt",
+            message: "Prøv igjen senere",
+            duration: 5000,
+          });
+        }
+      })
+      .catch((e) => {
+        presentToast({
+          header: "Noe gikk galt",
+          message: e.response.data.error,
+          duration: 7500,
+        });
+      });
   };
 
   return (
@@ -120,6 +181,7 @@ const RegisterPage: React.FC<RegisterPageProps> = () => {
                 value={password1}
                 placeholder="Passord"
                 onIonChange={(e) => setPassword1(e.detail.value!)}
+                type="password"
                 clearInput
               ></IonInput>
             </IonItem>
@@ -129,6 +191,7 @@ const RegisterPage: React.FC<RegisterPageProps> = () => {
                 value={password2}
                 placeholder="Gjenta passord"
                 onIonChange={(e) => setPassword2(e.detail.value!)}
+                type="password"
                 clearInput
               ></IonInput>
             </IonItem>
