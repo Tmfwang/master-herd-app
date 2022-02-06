@@ -120,7 +120,7 @@ const RegisterPage: React.FC<RegisterPageProps> = () => {
           </IonToolbar>
         </IonHeader>
         <IonContent fullscreen>
-          <IonList>
+          <IonList style={{margin: "10px"}}>
             <IonLabel
               style={{
                 fontSize: "25px",
@@ -128,7 +128,7 @@ const RegisterPage: React.FC<RegisterPageProps> = () => {
                 width: "100vw",
               }}
             >
-              <div style={{ marginTop: "20px" }}>Registrer ny bruker</div>
+              <div style={{ marginTop: "10px", marginBottom: "20px" }}>Registrer ny bruker</div>
             </IonLabel>
 
             <IonItem style={{ marginTop: "10px" }}>
@@ -149,23 +149,25 @@ const RegisterPage: React.FC<RegisterPageProps> = () => {
               ></IonInput>
             </IonItem>
 
-            <IonItem style={{ marginTop: "10px" }}>
-              <IonInput
-                value={gaardsNumber}
-                placeholder="Gårdsnummer"
-                onIonChange={(e) => setGaardsNumber(e.detail.value!)}
-                clearInput
-              ></IonInput>
-            </IonItem>
+            <div style={{display: "flex", flexDirection: "row", gap: "10px"}}>
+              <IonItem style={{ marginTop: "10px" }}>
+                <IonInput
+                  value={gaardsNumber}
+                  placeholder="Gårdsnummer"
+                  onIonChange={(e) => setGaardsNumber(e.detail.value!)}
+                  clearInput
+                ></IonInput>
+              </IonItem>
 
-            <IonItem style={{ marginTop: "10px" }}>
-              <IonInput
-                value={bruksNumber}
-                placeholder="Bruksnummer"
-                onIonChange={(e) => setBruksNumber(e.detail.value!)}
-                clearInput
-              ></IonInput>
-            </IonItem>
+              <IonItem style={{ marginTop: "10px" }}>
+                <IonInput
+                  value={bruksNumber}
+                  placeholder="Bruksnummer"
+                  onIonChange={(e) => setBruksNumber(e.detail.value!)}
+                  clearInput
+                ></IonInput>
+              </IonItem>
+            </div>
 
             <IonItem style={{ marginTop: "10px" }}>
               <IonInput

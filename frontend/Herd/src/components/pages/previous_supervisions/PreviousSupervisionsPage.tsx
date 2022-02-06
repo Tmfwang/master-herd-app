@@ -34,6 +34,8 @@ import {
   trashBinOutline,
   cloudUploadOutline,
   cloudDoneOutline,
+  chevronBackOutline,
+  chevronForwardOutline,
 } from "ionicons/icons";
 
 import MainHamburgerMenu from "../../shared/MainHamburgerMenu";
@@ -67,6 +69,8 @@ const PreviousSupervisionsPage: React.FC<
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [showToast, setShowToast] = useState<boolean>(true);
   const [authToken, setAuthToken] = useState("");
+
+  const [slidedSupervision, setSlidedSupervision] = useState<supervisionType>();
 
   const listRef = useRef(null);
 
@@ -424,7 +428,17 @@ const PreviousSupervisionsPage: React.FC<
               {allSupervisions
                 .map((supervision: supervisionType) => {
                   return (
-                    <IonItemSliding>
+                    <IonItemSliding
+                      onIonDrag={async (e) => {
+                        // @ts-ignore
+                        let openRatio = await e.target.getSlidingRatio();
+                        if (openRatio === 1) {
+                          setSlidedSupervision(supervision);
+                        } else {
+                          setSlidedSupervision(undefined);
+                        }
+                      }}
+                    >
                       <IonItem button>
                         <IonIcon
                           slot="start"
@@ -534,6 +548,25 @@ const PreviousSupervisionsPage: React.FC<
                                 <div>{calculateTotalSheep(supervision)}</div>
                               </div>
                             </div>
+
+                            <div
+                              style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                margin: "auto",
+                                marginRight: "-9px",
+                                marginLeft: "0px",
+                                width: "20px",
+                              }}
+                            >
+                              <IonIcon
+                                icon={
+                                  slidedSupervision === supervision
+                                    ? chevronForwardOutline
+                                    : chevronBackOutline
+                                }
+                              ></IonIcon>
+                            </div>
                           </div>
                         </IonLabel>
                       </IonItem>
@@ -566,7 +599,7 @@ const PreviousSupervisionsPage: React.FC<
                 .reverse()}
             </IonList>
           )}
-          {allSupervisions.length === 0 && !isLoading && (
+          {allSupervisions.length === 0 && !isLoading && !showToast && (
             <div>
               <div
                 style={{

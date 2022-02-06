@@ -41,7 +41,6 @@ const LoginPage: React.FC<LoginPageProps> = () => {
 
   const [presentToast] = useIonToast();
   let history = useHistory();
-  
 
   const handleLogin = async () => {
     axios
@@ -107,7 +106,7 @@ const LoginPage: React.FC<LoginPageProps> = () => {
           </IonToolbar>
         </IonHeader>
         <IonContent fullscreen>
-          <IonList>
+          <IonList style={{ margin: "10px" }}>
             <IonLabel
               style={{
                 fontSize: "25px",
@@ -115,7 +114,9 @@ const LoginPage: React.FC<LoginPageProps> = () => {
                 width: "100vw",
               }}
             >
-              <div style={{ marginTop: "20px" }}>Logg inn</div>
+              <div style={{ marginTop: "10px", marginBottom: "20px" }}>
+                Logg inn
+              </div>
             </IonLabel>
 
             <IonItem style={{ marginTop: "10px" }}>
