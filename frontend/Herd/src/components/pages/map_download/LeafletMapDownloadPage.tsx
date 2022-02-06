@@ -159,7 +159,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ latestLocation }) => {
         message:
           "Ønsker du å laste ned de " +
           tiles.length +
-          ' kartrutene som utgjør kartområdet på skjermen? Disse kan når som helst slettes ved å trykke på "Slett nedlastede kart" fra alternativene i sidemenyen. Du kan teste ut alle de nedlastede kartutsnittene ved å skru av internett på mobilen din.',
+          " kartrutene som utgjør kartområdet på skjermen? Dette kartutsnittet vil lagres sammen med eventuelle andre kartutsnitt du tidligere har lastet ned. Du kan teste ut alle de nedlastede kartutsnittene ved å skru av internett på mobilen din.",
         buttons: [
           "Avbryt",
           {

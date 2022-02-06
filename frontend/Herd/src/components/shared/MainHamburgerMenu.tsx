@@ -66,6 +66,8 @@ const MainHamburgerMenu: React.FC<MainHamburgerMenuProps> = () => {
   });
 
   async function handleLogOut() {
+    history.push("/");
+
     await SecureStoragePlugin.set({
       key: "authenticationToken",
       value: "",
@@ -74,8 +76,6 @@ const MainHamburgerMenu: React.FC<MainHamburgerMenuProps> = () => {
         header: "Logget ut",
         duration: 5000,
       });
-
-      history.push("/");
     });
   }
 
