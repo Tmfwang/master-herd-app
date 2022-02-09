@@ -54,7 +54,11 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
       if (pathPolyline) {
         pathPolyline.setLatLngs(polylinePoints);
       } else if (map) {
-        let newPolyline = L.polyline(polylinePoints, { weight: 6 });
+        let newPolyline = L.polyline(polylinePoints, {
+          weight: 6,
+          stroke: true,
+          color: "black",
+        });
         setPathPolyline(newPolyline);
 
         newPolyline.addTo(map);
