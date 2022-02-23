@@ -29,7 +29,6 @@ import { logInOutline } from "ionicons/icons";
 import MainHamburgerMenu from "../../shared/MainHamburgerMenu";
 
 import "./LoginPage.css";
-import { request } from "https";
 import { useHistory } from "react-router";
 
 interface LoginPageProps {}
@@ -37,6 +36,7 @@ interface LoginPageProps {}
 // This is the main component for the login page; it provides inputs for logging in
 const LoginPage: React.FC<LoginPageProps> = () => {
   const [email, setEmail] = useState<string>();
+  const [gaardsNumber, setGaardsNumber] = useState<string>();
   const [password, setPassword] = useState<string>();
 
   const [presentToast] = useIonToast();
@@ -47,7 +47,8 @@ const LoginPage: React.FC<LoginPageProps> = () => {
       .post(
         "https://master-herd-api.herokuapp.com/api-token-auth/",
         {
-          username: email?.toLowerCase(),
+          // @ts-ignore
+          username: email?.toLowerCase() + gaardsNumber?.toUpperCase(),
           password: password,
         },
         {
@@ -75,7 +76,7 @@ const LoginPage: React.FC<LoginPageProps> = () => {
           presentToast({
             header: "Noe gikk galt",
             message:
-              "Sjekk at du skrevet riktig e-post og passord, og prøv igjen",
+              "Sjekk at du skrevet riktig e-post, gårdsnummer og passord, og prøv igjen",
             duration: 5000,
           });
         }
@@ -126,6 +127,15 @@ const LoginPage: React.FC<LoginPageProps> = () => {
                 onIonChange={(e) => setEmail(e.detail.value!)}
                 clearInput
                 type="email"
+              ></IonInput>
+            </IonItem>
+
+            <IonItem style={{ marginTop: "10px" }}>
+              <IonInput
+                value={gaardsNumber}
+                placeholder="Gårdsnummer"
+                onIonChange={(e) => setGaardsNumber(e.detail.value!)}
+                clearInput
               ></IonInput>
             </IonItem>
 

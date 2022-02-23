@@ -55,8 +55,8 @@ const RegisterPage: React.FC<RegisterPageProps> = () => {
           password1: password1,
           password2: password2,
           full_name: fullName,
-          gaards_number: gaardsNumber,
-          bruks_number: bruksNumber,
+          gaards_number: gaardsNumber?.toUpperCase(),
+          bruks_number: bruksNumber?.toUpperCase(),
           municipality: municipality,
         },
         {
@@ -120,7 +120,7 @@ const RegisterPage: React.FC<RegisterPageProps> = () => {
           </IonToolbar>
         </IonHeader>
         <IonContent fullscreen>
-          <IonList style={{margin: "10px"}}>
+          <IonList style={{ margin: "10px" }}>
             <IonLabel
               style={{
                 fontSize: "25px",
@@ -128,7 +128,9 @@ const RegisterPage: React.FC<RegisterPageProps> = () => {
                 width: "100vw",
               }}
             >
-              <div style={{ marginTop: "10px", marginBottom: "20px" }}>Registrer ny bruker</div>
+              <div style={{ marginTop: "10px", marginBottom: "20px" }}>
+                Registrer ny bruker
+              </div>
             </IonLabel>
 
             <IonItem style={{ marginTop: "10px" }}>
@@ -149,7 +151,7 @@ const RegisterPage: React.FC<RegisterPageProps> = () => {
               ></IonInput>
             </IonItem>
 
-            <div style={{display: "flex", flexDirection: "row", gap: "10px"}}>
+            <div style={{ display: "flex", flexDirection: "row", gap: "10px" }}>
               <IonItem style={{ marginTop: "10px" }}>
                 <IonInput
                   value={gaardsNumber}
