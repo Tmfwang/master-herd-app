@@ -1,4 +1,4 @@
-package herd.app.tmfwang;
+package herd2.app.tmfwang;
 
 import com.getcapacitor.BridgeActivity;
 
